@@ -1,0 +1,45 @@
+---
+description: Traveler Supply Exchange — project context, stack, deploy flow, and conventions. Always loaded.
+globs:
+alwaysApply: true
+---
+
+# Traveler Supply Exchange (TSE)
+
+A concept app: a trusted way for travelers to **borrow the gear a trip needs and pass on the gear it leaves behind**, instead of over-buying or throwing it away. Built as a live product-design prototype to show thinking, tool use, and a shippable MVP.
+
+- **Root cause being addressed:** it's a circulation problem, not a buying problem.
+- **Riskiest assumption the MVP proves:** a traveler can find and *safely* get gear they need, nearby, right now.
+
+## Stack & architecture
+- **Plain static site. No framework, no build step, no dependencies.**
+- `index.html` at the repo root is the entire app: a single self-contained file with inline CSS and JS. It renders a phone frame and switches between screens via a `go(id)` function that toggles an `active` class.
+- Keep it a single file unless I explicitly ask to split it. Do not introduce a framework, bundler, package.json, or npm dependencies without asking first.
+- Mobile-first. The current design targets a ~390px phone frame.
+
+## The MVP (what exists)
+Five screens making up the "I need it tonight" hero flow:
+1. Home / search a need
+2. Results — matched items nearby (distance + re-circulation count)
+3. Item detail — trust signals + a clear "not for sale" notice
+4. Safe-exchange ground rules
+5. Confirmation that rewards returning the item
+
+## Intentionally NOT built (don't add unless asked)
+Offload/listing flow, item world-journey map, achievements/gamification, real supply matching, any backend. Inventory is **seeded/hardcoded** on purpose to sidestep the cold-start problem for the demo.
+
+## Deploy flow (local → GitHub → Vercel)
+- Repo: `github.com/bbrdnx/TravelersSupplyExchange`. Vercel project `travelers-supply-exchange` is connected to it and **auto-deploys on push to `main`**. Live at https://travelers-supply-exchange.vercel.app
+- `prep/` holds interview-prep docs. It's version-controlled but excluded from the live site via `.vercelignore`. Don't put deployable app code in `prep/`.
+- **Git/deploy is run by me (Barbara), not by the agent.** When a change is ready to ship, give me the git commands to run myself: `git add -A`, then `git commit -m "..."`, then `git push`. Do not run git commands automatically.
+- **Give terminal commands ONE LINE AT A TIME.** Multi-line pasted blocks cause a zsh parse error in my terminal.
+
+## Copy & voice conventions
+- **No em-dashes.** Use a comma, period, or rewrite. (Applies to UI copy and any docs.)
+- Keep copy concise, direct, active voice. Card/list descriptions are one line.
+- Safety language stays plain and reassuring, not legalistic.
+
+## How to work with me
+- Make changes in small, reviewable steps. Say what you're about to change before changing it.
+- Prefer editing `index.html` directly over describing changes.
+- When something is ambiguous, ask rather than guess.
