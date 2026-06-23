@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traveler Supply Exchange — Idea One-Pager</title>
+<style>
+  :root{
+    --ink:#0D1B1E; --muted:#6A7678; --rule:rgba(13,27,30,.12);
+    --accent:#E2403E; --teal:#127475; --gold:#F7B32B; --bg:#FBFEF9; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:32px 20px;}
+  .wrap{max-width:920px;margin:0 auto}
+  header{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:18px}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);font-weight:700}
+  h1{font-size:26px;margin:4px 0 2px}
+  .sub{color:var(--muted);font-size:13px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+  .card h3{margin:0 0 6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .card p{margin:0;font-size:14px}
+  h2{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);
+    margin:22px 0 8px;border-bottom:1px solid var(--rule);padding-bottom:5px}
+  .lead{font-size:16px;margin:0 0 4px}
+  ul{margin:6px 0 0;padding-left:18px}
+  li{margin:4px 0}
+  .pill{display:inline-block;background:rgba(18,116,117,.10);border:1px solid rgba(18,116,117,.32);
+    color:#0E5C5D;font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;margin:0 4px 4px 0}
+  .arc{counter-reset:step;list-style:none;padding:0;margin:8px 0 0}
+  .arc li{counter-increment:step;position:relative;padding:6px 0 6px 34px;border-bottom:1px solid var(--rule)}
+  .arc li:last-child{border-bottom:0}
+  .arc li::before{content:counter(step);position:absolute;left:0;top:6px;width:22px;height:22px;
+    background:var(--ink);color:var(--bg);border-radius:50%;font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center}
+  .arc b{color:var(--ink)}
+  .q{font-weight:700;margin:10px 0 2px;font-size:14px}
+  .a{margin:0 0 6px;color:#2a3a3d;font-size:14px}
+  .flag{background:rgba(247,179,43,.12);border-left:3px solid var(--gold);padding:8px 12px;border-radius:0 8px 8px 0;margin:6px 0;font-size:14px}
+  .hero-flow{background:rgba(226,64,62,.05);border:1px solid rgba(226,64,62,.25);border-radius:10px;padding:14px 16px}
+  .hero-flow b{color:var(--accent)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media print{body{padding:0}.card,.hero-flow{break-inside:avoid}}
+  @media(max-width:640px){.grid,.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Round 2 · Live MVP prototyping</div>
+  <h1>Traveler Supply Exchange (TSE)</h1>
+  <div class="sub">Concept brief + build plan. Goal: show my thinking, my tool use, and a working MVP.</div>
+</header>
+
+<p class="lead"><b>One line:</b> A trusted way for travelers to borrow the gear a trip needs and pass on the gear a trip leaves behind, instead of over-buying or throwing it away.</p>
+
+<div style="margin-top:8px">
+  <span class="pill">Concept, not a real product spec</span>
+  <span class="pill">AI-assisted build</span>
+  <span class="pill">One hero flow = MVP</span>
+</div>
+
+<div class="grid">
+  <div class="card"><h3>User</h3><p>A traveler mid-trip who needs an item they didn't pack (a tent for two nights), or who is leaving and can't take gear home.</p></div>
+  <div class="card"><h3>Surface problem</h3><p>Travelers either spend budget on gear they'll use once, or abandon usable gear at trip's end. Both feel wasteful.</p></div>
+  <div class="card"><h3>Root cause (the insight)</h3><p>It isn't a buying problem, it's a <b>circulation</b> problem. Usable gear is stranded near other travelers who need it, with no trusted way to hand it off.</p></div>
+  <div class="card"><h3>Riskiest assumption</h3><p>That a traveler can <b>find and safely get</b> the gear they need, nearby, right now. If that loop works, everything else follows.</p></div>
+</div>
+
+<h2>What I'm optimizing this session for</h2>
+<p style="margin-top:0">Not a finished app, three things: <b>(1) visible thinking</b> — frame the problem, find the root cause, make a defensible scope cut; <b>(2) tool fluency</b> — drive an AI build deliberately, with me as the editor, not the tool as autopilot; <b>(3) a working MVP</b> — one real, clickable flow by the end. Depth over breadth. I'd rather ship one honest flow than gesture at ten.</p>
+
+<h2>The hard problem, named before they ask</h2>
+<div class="flag"><b>Liquidity / cold-start.</b> Any local exchange is worthless if no gear is near you tonight. I'll name this myself rather than wait to be caught: the MVP fakes a small seeded inventory so the loop is demonstrable, and the real-world answer (partner drop hubs, accommodation lost-and-found, AI matching) is the next problem to solve, not this session's. Naming the root risk first is the point.</div>
+<div class="flag"><b>Incentive asymmetry.</b> Everyone wants free gear; fewer give good gear away. The "can't take it home" moment is the natural supply trigger. That's my first assumption to test if this were real.</div>
+
+<h2>The cut: the MVP I'll build live</h2>
+<div class="hero-flow">
+  <p style="margin:0 0 6px"><b>Build the "I need it tonight" flow.</b> It proves the riskiest assumption and it's the most concrete thing to show clickable.</p>
+  <p style="margin:0">Search a need → <b>see matched items nearby</b> (seeded data) → item detail with <b>trust signals</b> (owner profile, times re-circulated, a clear "not for sale" banner) → request → <b>safe-exchange screen</b> (meet in a lit public place, never your room; legality reminder). I'll name the rest of the vision aloud (offload flow, item world-journey, achievements) but won't build it. The cut is the thinking.</p>
+</div>
+
+<h2>Live session arc (think aloud, narrate every decision)</h2>
+<ol class="arc">
+  <li><b>Frame (≈2 min).</b> The traveler-waste problem and who it's for. State it plainly.</li>
+  <li><b>Root cause.</b> Circulation, not buying. Name the riskiest assumption I'm choosing to test.</li>
+  <li><b>Name the cut.</b> Say the full vision, then commit to the one flow that de-risks it, and why.</li>
+  <li><b>Build with the AI,</b> narrating: I prompt in small steps, read what it gives back, correct it, and make the design calls (trust signals, the "not for sale" stance, safe-handoff UX). Show the editing, not just the generating.</li>
+  <li><b>Close on what I'd test + measure,</b> not on what I built: exchange completion rate, supply density per destination, repeat use.</li>
+</ol>
+
+<h2>Showing tool fluency (the part they're watching)</h2>
+<div class="two">
+  <div class="card"><h3>Do</h3><p>Prompt in small, named steps. Say what you expect before you run it. Read the output critically out loud. Reject and redirect when it's wrong. Keep a running "next I want…" so you always look in control.</p></div>
+  <div class="card"><h3>Avoid</h3><p>One giant prompt and hope. Accepting the first output silently. Letting the tool pick the scope for you. Polishing pixels before the flow works. Going quiet while it generates.</p></div>
+</div>
+
+<h2>If they probe (have these ready)</h2>
+<p class="q">"What's the hardest problem here?"</p>
+<p class="a">Liquidity. No supply nearby means no product. For the MVP I seeded inventory to prove the loop; the real fix is drop hubs plus matching, and that's the next thing I'd design.</p>
+<p class="q">"Why would anyone give away good gear for free?"</p>
+<p class="a">The trigger is "I can't take it home." If this were real I'd test the supply side first and measure listings, not opinions.</p>
+<p class="q">"How do you keep people safe?"</p>
+<p class="a">Designed-in, not bolted-on: public-place exchange prompts, never-at-your-room, a legality reminder, profiles and re-circulation history as trust, and a report-a-bad-exchange path.</p>
+<p class="q">"What would you cut or change?"</p>
+<p class="a">For v1 I'd drop the global item-journey and most gamification to prove the core loop first. Honest scoping is the senior move.</p>
+<p class="q">"How did you decide what to build first?"</p>
+<p class="a">I picked the single flow that, if it works, de-risks the whole concept, and that's also the most testable with real users fastest.</p>
+
+<h2>Success metric (lead with one)</h2>
+<p style="margin-top:0">Primary: <b>exchange completion rate</b> — of travelers who request an item, how many complete a safe handoff. Supporting: supply density per destination, repeat use across a trip.</p>
+
+<p style="margin-top:18px;color:var(--muted);font-size:12px;border-top:1px solid var(--rule);padding-top:10px">
+Reminders: lead with the problem and the root cause · name the cut out loud · narrate how you steer the AI, the editing is the skill · slow down on the safe-exchange decision · let "what I'd test next" close it, not "what I built."</p>
+
+</div>
+</body>
+</html>

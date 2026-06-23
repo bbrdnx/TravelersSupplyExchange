@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traveler Supply Exchange — MVP</title>
+<style>
+  :root{
+    --ink:#13211f; --muted:#6b7b78; --line:rgba(19,33,31,.10);
+    --accent:#127475; --accent-deep:#0e5c5d; --warn:#E2403E; --gold:#F7B32B;
+    --bg:#f4f6f4; --card:#ffffff; --chip:#eef3f2;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#e7ebe9;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);
+    display:flex;align-items:flex-start;justify-content:center;gap:28px;flex-wrap:wrap;padding:28px 16px;min-height:100vh}
+  /* phone frame */
+  .phone{width:390px;height:780px;background:var(--bg);border-radius:44px;position:relative;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.22), 0 0 0 11px #0d1413, 0 0 0 13px #1c2422;flex:0 0 auto}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:148px;height:30px;background:#0d1413;
+    border-radius:0 0 18px 18px;z-index:40}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);
+    opacity:0;visibility:hidden;transform:translateX(14px);transition:opacity .28s ease, transform .28s ease;z-index:1}
+  .screen.active{opacity:1;visibility:visible;transform:none;z-index:2}
+  /* status + nav */
+  .statusbar{height:46px;flex:0 0 auto;display:flex;align-items:flex-end;justify-content:space-between;
+    padding:0 26px 4px;font-size:13px;font-weight:600;color:var(--ink)}
+  .appbar{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:6px 18px 10px}
+  .appbar .back{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ink);cursor:pointer}
+  .appbar h1{font-size:17px;margin:0;font-weight:700}
+  .body{flex:1 1 auto;overflow-y:auto;padding:4px 18px 24px}
+  .body::-webkit-scrollbar{display:none}
+  /* brand header (home) */
+  .brand{padding:2px 18px 0}
+  .brand .logo{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:-.01em;font-size:18px}
+  .brand .dot{width:22px;height:22px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px}
+  .brand .tag{color:var(--muted);font-size:13px;margin:4px 0 0}
+  /* search */
+  .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:13px 15px;margin:16px 0 6px;box-shadow:0 2px 8px rgba(19,33,31,.04)}
+  .search input{border:0;outline:0;font-size:15px;flex:1;background:transparent;color:var(--ink)}
+  .search .ic{color:var(--muted)}
+  .qlabel{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:18px 2px 8px;font-weight:700}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer;font-weight:500}
+  .chip:active{background:#e2eae8}
+  .seed-note{margin-top:22px;font-size:12px;color:var(--muted);background:#fbf3da;border:1px solid rgba(247,179,43,.4);
+    border-radius:10px;padding:10px 12px}
+  /* result cards */
+  .result-head{font-size:13px;color:var(--muted);margin:4px 2px 12px}
+  .result-head b{color:var(--ink)}
+  .item{display:flex;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;
+    margin-bottom:12px;cursor:pointer;box-shadow:0 2px 8px rgba(19,33,31,.04);transition:transform .12s ease}
+  .item:active{transform:scale(.99)}
+  .thumb{width:74px;height:74px;border-radius:12px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:32px}
+  .t-tent{background:#e8f1ef}.t-bag{background:#fdeede}.t-stove{background:#eaeef6}.t-chair{background:#f0ecf7}
+  .item .meta{flex:1;min-width:0}
+  .item h3{margin:0;font-size:15.5px;font-weight:700}
+  .item .row{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;margin-top:3px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:4px;background:var(--chip);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;color:var(--accent-deep)}
+  .badge.free{background:#e7f3ee;color:#1f7a52}
+  .dist{font-weight:600;color:var(--ink)}
+  /* item detail */
+  .hero-img{height:188px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:74px;margin:4px 0 14px}
+  .detail-title{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .detail-title h2{font-size:21px;margin:0}
+  .freepill{background:#e7f3ee;color:#1f7a52;font-weight:700;font-size:13px;border-radius:999px;padding:5px 12px;white-space:nowrap}
+  .notforsale{display:flex;gap:9px;align-items:flex-start;background:rgba(226,64,62,.07);border:1px solid rgba(226,64,62,.28);
+    border-radius:12px;padding:11px 13px;margin:14px 0;font-size:13px;color:#a32f2d}
+  .notforsale b{color:var(--warn)}
+  .owner{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:14px 0}
+  .avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#127475,#0e5c5d);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+  .owner .who{flex:1}
+  .owner .who b{font-size:15px}
+  .owner .who .sub{color:var(--muted);font-size:12.5px}
+  .verified{color:var(--accent);font-size:12px;font-weight:700}
+  .trust{display:flex;gap:10px;margin:14px 0}
+  .trust .t{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px;text-align:center}
+  .trust .t .n{font-size:19px;font-weight:800;color:var(--accent-deep)}
+  .trust .t .l{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .desc{font-size:14px;color:#33403d;margin:6px 0 0}
+  /* exchange screen */
+  .safe-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 4px;margin:6px 0 16px}
+  .safe-row{display:flex;gap:13px;align-items:flex-start;padding:13px 14px;border-bottom:1px solid var(--line)}
+  .safe-row:last-child{border-bottom:0}
+  .safe-ic{width:34px;height:34px;border-radius:9px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--chip)}
+  .safe-row .st b{display:block;font-size:14.5px;margin-bottom:1px}
+  .safe-row .st span{font-size:12.5px;color:var(--muted)}
+  .legal{background:#fbf3da;border:1px solid rgba(247,179,43,.45);border-radius:12px;padding:11px 13px;font-size:12.5px;color:#8a6a14;margin-bottom:14px}
+  /* success */
+  .done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+  .done .ring{width:88px;height:88px;border-radius:50%;background:#e7f3ee;display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:18px}
+  .done h2{font-size:22px;margin:0 0 6px}
+  .done p{color:var(--muted);margin:0 0 6px;max-width:260px}
+  /* footer button */
+  .foot{flex:0 0 auto;padding:12px 18px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 26%)}
+  .btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;text-align:center}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(18,116,117,.32)}
+  .btn-primary:active{background:var(--accent-deep)}
+  .btn-ghost{background:transparent;color:var(--muted);padding:10px;font-weight:600}
+  /* side caption */
+  .caption{max-width:280px;flex:0 0 auto;align-self:center}
+  .caption h4{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#0e5c5d;margin:0 0 8px}
+  .caption ol{padding-left:18px;margin:0;color:#33403d;font-size:14px}
+  .caption li{margin:8px 0}
+  .caption .nb{margin-top:16px;font-size:12.5px;color:#6b7b78;border-top:1px solid rgba(19,33,31,.12);padding-top:12px}
+  @media(max-width:880px){.caption{max-width:390px}}
+</style>
+</head>
+<body>
+
+<!-- ===================== PHONE ===================== -->
+<div class="phone">
+  <div class="notch"></div>
+
+  <!-- SCREEN 1: HOME / SEARCH NEED -->
+  <section class="screen active" id="s-home">
+    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="brand">
+      <div class="logo"><span class="dot">⇄</span> Traveler Supply Exchange</div>
+      <p class="tag">Borrow what your trip needs. Pass on what it leaves behind.</p>
+    </div>
+    <div class="body">
+      <div class="search" onclick="go('s-results')">
+        <span class="ic">⌕</span>
+        <input placeholder="What do you need?" readonly>
+      </div>
+      <div class="qlabel">Popular right now</div>
+      <div class="chips">
+        <span class="chip" onclick="go('s-results')">⛺ Tent</span>
+        <span class="chip" onclick="go('s-results')">🛌 Sleeping bag</span>
+        <span class="chip" onclick="go('s-results')">🔥 Camp stove</span>
+        <span class="chip" onclick="go('s-results')">🪑 Beach chair</span>
+        <span class="chip" onclick="go('s-results')">🥾 Trekking poles</span>
+        <span class="chip" onclick="go('s-results')">🧊 Cooler</span>
+      </div>
+      <div class="qlabel">Leaving soon?</div>
+      <div class="chips">
+        <span class="chip" onclick="go('s-results')">＋ List gear you can't take home</span>
+      </div>
+      <div class="seed-note">Demo note: inventory is seeded for this prototype. In the real product, supply comes from nearby travelers, partner accommodations, and drop hubs, matched to your location.</div>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: RESULTS -->
+  <section class="screen" id="s-results">
+    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-home')">‹</div>
+      <h1>Tents near you</h1>
+    </div>
+    <div class="body">
+      <div class="result-head"><b>4 available</b> within 2 miles · Playa Hermosa</div>
+
+      <div class="item" onclick="go('s-detail')">
+        <div class="thumb t-tent">⛺</div>
+        <div class="meta">
+          <h3>2-person backpacking tent</h3>
+          <div class="row"><span class="dist">0.3 mi</span> · <span>Maya R.</span> <span class="badge free">Free</span> <span class="badge">↻ circulated 4×</span></div>
+        </div>
+      </div>
+
+      <div class="item" onclick="go('s-detail')">
+        <div class="thumb t-tent">⛺</div>
+        <div class="meta">
+          <h3>4-person family tent</h3>
+          <div class="row"><span class="dist">0.8 mi</span> · <span>Devin K.</span> <span class="badge free">Free</span> <span class="badge">↻ circulated 1×</span></div>
+        </div>
+      </div>
+
+      <div class="item" onclick="go('s-detail')">
+        <div class="thumb t-stove">⛺</div>
+        <div class="meta">
+          <h3>Ultralight 1-person tent</h3>
+          <div class="row"><span class="dist">1.1 mi</span> · <span>Sofia L.</span> <span class="badge free">Free</span> <span class="badge">↻ circulated 7×</span></div>
+        </div>
+      </div>
+
+      <div class="item" onclick="go('s-detail')">
+        <div class="thumb t-bag">⛺</div>
+        <div class="meta">
+          <h3>Pop-up beach tent</h3>
+          <div class="row"><span class="dist">1.9 mi</span> · <span>Aaron M.</span> <span class="badge free">Free</span> <span class="badge">↻ circulated 2×</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: ITEM DETAIL -->
+  <section class="screen" id="s-detail">
+    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-results')">‹</div>
+      <h1>Item details</h1>
+    </div>
+    <div class="body">
+      <div class="hero-img t-tent">⛺</div>
+      <div class="detail-title">
+        <h2>2-person backpacking tent</h2>
+        <span class="freepill">Free</span>
+      </div>
+      <p class="desc">Lightweight 3-season tent, ~2.4 kg, packs to a daypack. Used it for one night on this trip, can't take it home Friday. Works great, all stakes included.</p>
+
+      <div class="notforsale">
+        <span>🛈</span><div><b>Not for sale.</b> TSE is for exchange only. Never send or accept money for an item, report anyone who asks.</div>
+      </div>
+
+      <div class="owner">
+        <div class="avatar">M</div>
+        <div class="who"><b>Maya R.</b> <span class="verified">✓ ID verified</span><div class="sub">12 exchanges · returns gear in great shape</div></div>
+      </div>
+
+      <div class="trust">
+        <div class="t"><div class="n">↻ 4×</div><div class="l">Re-circulated by travelers</div></div>
+        <div class="t"><div class="n">0.3 mi</div><div class="l">From your location</div></div>
+        <div class="t"><div class="n">★ 4.9</div><div class="l">Exchange rating</div></div>
+      </div>
+    </div>
+    <div class="foot"><button class="btn btn-primary" onclick="go('s-exchange')">Request this item</button></div>
+  </section>
+
+  <!-- SCREEN 4: SAFE EXCHANGE -->
+  <section class="screen" id="s-exchange">
+    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-detail')">‹</div>
+      <h1>Arrange a safe exchange</h1>
+    </div>
+    <div class="body">
+      <p class="desc" style="margin-bottom:14px">Maya will get your request. Before you meet, a few ground rules to keep the exchange safe.</p>
+      <div class="safe-card">
+        <div class="safe-row"><div class="safe-ic">📍</div><div class="st"><b>Meet in a well-lit public place</b><span>A cafe, lobby, or transit hub. Never at your room, hotel, or Airbnb.</span></div></div>
+        <div class="safe-row"><div class="safe-ic">💸</div><div class="st"><b>No money changes hands</b><span>TSE is exchange-only. If anyone asks to be paid, cancel and report it.</span></div></div>
+        <div class="safe-row"><div class="safe-ic">👥</div><div class="st"><b>Bring a friend if you can</b><span>And share your meet-up location with someone you trust.</span></div></div>
+      </div>
+      <div class="legal">⚖️ If an item is illegal to possess in the country you're in, it's illegal to exchange on TSE. Don't list or accept it.</div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-primary" onclick="go('s-done')">Send request &amp; suggest a meeting spot</button>
+      <button class="btn btn-ghost" onclick="go('s-detail')">Back</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 5: SUCCESS -->
+  <section class="screen" id="s-done">
+    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="done">
+      <div class="ring">✓</div>
+      <h2>Request sent to Maya</h2>
+      <p>You'll get a notification when she confirms a public meeting spot near you.</p>
+      <p style="color:#1f7a52;font-weight:600;margin-top:10px">When you return this tent to the exchange, it'll be circulated 5× — and you'll earn the <b>Keep&nbsp;It&nbsp;Moving</b> badge.</p>
+    </div>
+    <div class="foot">
+      <button class="btn btn-primary" onclick="go('s-home')">Done</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===================== SIDE CAPTION (talk track) ===================== -->
+<div class="caption">
+  <h4>The hero flow</h4>
+  <ol>
+    <li><b>Need it tonight.</b> One clear job: find gear you didn't pack.</li>
+    <li><b>Matched nearby.</b> Distance + re-circulation count do the trust work.</li>
+    <li><b>Trust signals.</b> "Not for sale" banner, verified owner, circulation history.</li>
+    <li><b>Safe exchange.</b> Safety is a designed screen, not fine print.</li>
+    <li><b>Close the loop.</b> Returning the item is the rewarded behavior.</li>
+  </ol>
+  <div class="nb">This is the MVP cut: one flow that proves the riskiest assumption (find + safely get gear, fast). Offload, item-journey, and achievements are named aloud, not built. Inventory is seeded to dodge the cold-start problem for the demo.</div>
+</div>
+
+<script>
+  function go(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelector('#'+id+' .body, #'+id+' .done')?.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>

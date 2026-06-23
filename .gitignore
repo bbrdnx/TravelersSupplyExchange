@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Vercel
+.vercel
+
+# Editor / misc
+*.log
+Thumbs.db
