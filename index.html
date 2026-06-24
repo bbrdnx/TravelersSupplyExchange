@@ -171,6 +171,9 @@
   /* detected category */
   .detected-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
   .change-link{font-size:13px;color:var(--accent);cursor:pointer;font-weight:600}
+  /* caption nav chips */
+  .step-link{display:inline-flex;align-items:center;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:11px;font-weight:600;color:var(--accent);cursor:pointer;margin-left:4px;white-space:nowrap;vertical-align:middle;text-decoration:none}
+  .step-link:active{background:#dff0f0}
 </style>
 </head>
 <body>
@@ -521,24 +524,24 @@
   <div class="caption-panel active" id="cap-borrow">
     <h4>Get it today</h4>
     <ol>
-      <li><b>Need it today.</b> One clear job: find gear you didn't pack.</li>
-      <li><b>Matched nearby.</b> Distance + re-circulation count do the trust work.</li>
-      <li><b>Trust signals.</b> "Not for sale" banner, circulation count, distance, rating.</li>
-      <li><b>Safe exchange.</b> Safety is a designed screen, not fine print.</li>
-      <li><b>Close the loop.</b> Returning the item is the rewarded behavior.</li>
+      <li><b>Need it today.</b> One clear job: find gear you didn't pack. <span class="step-link" onclick="go('s-home')">Home →</span></li>
+      <li><b>Matched nearby.</b> Distance and re-circulation count do the trust work. <span class="step-link" onclick="go('s-results')">Results →</span></li>
+      <li><b>Trust signals.</b> "Not for sale" banner, circulation count, distance, rating. <span class="step-link" onclick="go('s-detail')">Item detail →</span></li>
+      <li><b>Safe exchange.</b> Safety is a designed screen, not fine print. <span class="step-link" onclick="go('s-exchange')">Exchange rules →</span></li>
+      <li><b>Close the loop.</b> Returning the item is the rewarded behavior. <span class="step-link" onclick="go('s-done')">Confirmation →</span></li>
     </ol>
     <div class="nb">Flow 1 proves the riskiest assumption: find and safely get gear, fast. Inventory is seeded to dodge the cold-start problem for the demo.</div>
   </div>
   <div class="caption-panel" id="cap-list">
     <h4>Pass it on</h4>
     <ol>
-      <li><b>Leaving soon entry.</b> Home chip routes travelers who cannot take gear home.</li>
-      <li><b>Lightweight listing.</b> Category, condition, and a short description. No pricing.</li>
-      <li><b>Photo nudge.</b> Skip is allowed, but trust note explains why photos matter.</li>
-      <li><b>Pickup logistics.</b> Leaving date and a public meetup area, not a home address.</li>
-      <li><b>Preview parity.</b> Listing card matches Results so supply and demand look the same.</li>
+      <li><b>Leaving soon entry.</b> Home chip routes travelers who cannot take gear home. <span class="step-link" onclick="go('s-home')">Home →</span></li>
+      <li><b>Auto-detected listing.</b> Name and description drive category detection. Condition picks quality. No pricing. <span class="step-link" onclick="go('s-list-details')">Details →</span></li>
+      <li><b>Photo nudge.</b> Skip is allowed, but the trust note explains why photos matter. <span class="step-link" onclick="go('s-list-photo')">Photo →</span></li>
+      <li><b>Availability windows.</b> Add day and time ranges when you can meet, not a departure date. <span class="step-link" onclick="go('s-list-logistics')">Logistics →</span></li>
+      <li><b>Preview parity.</b> Listing card matches Results so supply and demand look the same. <span class="step-link" onclick="go('s-list-preview')">Preview →</span></li>
     </ol>
-    <div class="nb">Flow 2 closes the supply side of the circulation loop. It is designed, not backend-connected. Tap "List gear you can't take home" on Home to walk through it.</div>
+    <div class="nb">Flow 2 closes the supply side of the circulation loop. It is designed, not backend-connected. Tap "List gear you can't take home" on Home to start the full walk-through.</div>
   </div>
 </div>
 
