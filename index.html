@@ -123,6 +123,13 @@
   .owner .who b{font-size:15px}
   .owner .who .sub{color:var(--muted);font-size:12.5px}
   .verified{color:var(--blue);font-size:12px;font-weight:700}
+  /* owner card with grouped stats */
+  .owner-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 0 14px;cursor:pointer}
+  .owner-head{display:flex;align-items:center;gap:12px}
+  .owner-head .who{flex:1}
+  .owner-head .who b{font-size:15px}
+  .owner-head .who .sub{color:var(--muted);font-size:12.5px}
+  .owner-stats-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:13px 0 0}
   .trust{display:flex;gap:10px;margin:0 0 14px}
   .trust .t{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px;text-align:center}
   .trust .t .n{font-size:19px;font-weight:800;color:var(--navy)}
@@ -190,7 +197,9 @@
   .caption li{margin:8px 0}
   .caption .nb{margin-top:16px;font-size:12.5px;color:#6b7b78;border-top:1px solid rgba(19,33,31,.12);padding-top:12px}
   @media(max-width:880px){.caption{max-width:390px}}
-  .caption-tabs{display:flex;gap:8px;margin-bottom:12px}
+  .caption-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .cap-value{display:block;color:var(--forest);font-size:12.5px;margin-top:3px;font-weight:600}
+  .caption ol li{margin:11px 0}
   .caption-tab{background:transparent;border:1px solid rgba(19,33,31,.15);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
   .caption-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
   .caption-panel{display:none}
@@ -215,6 +224,18 @@
   /* === HOME FEED === */
   .home-scroll{flex:1 1 auto;overflow-y:auto;padding:4px 18px 8px}
   .home-scroll::-webkit-scrollbar{display:none}
+
+  /* leaving soon card */
+  .ls-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(19,33,31,.04)}
+  .ls-header{display:flex;align-items:flex-start;gap:11px;margin-bottom:11px}
+  .ls-icon{width:42px;height:42px;border-radius:11px;background:#e4f0dc;display:flex;align-items:center;justify-content:center;font-size:22px;flex:0 0 auto}
+  .ls-title{font-size:15px;font-weight:700;margin:0 0 3px}
+  .ls-sub{font-size:13px;color:var(--muted);margin:0;line-height:1.4}
+  .ls-achievement{display:flex;align-items:center;gap:10px;background:#FEF8EC;border:1px solid rgba(242,183,51,.4);border-radius:11px;padding:10px 12px;margin-bottom:12px}
+  .ls-medal{font-size:22px;flex:0 0 auto;line-height:1}
+  .ls-ach-text{font-size:13px;color:var(--navy);line-height:1.4}
+  .ls-ach-text strong{color:var(--navy)}
+  .btn-list-gear{width:100%;background:var(--forest);color:#fff;border:0;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.01em}
 
   /* borrowed card */
   .borrowed-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px;margin-bottom:4px;box-shadow:0 2px 8px rgba(19,33,31,.04)}
@@ -300,6 +321,46 @@
   .mc{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s}
   .mc.on{background:var(--blue);border-color:var(--blue);color:#fff}
   .multi-opt span{font-size:14px;color:var(--ink)}
+
+  /* === DISABLED DM (demo: most recent only) === */
+  .dm-item.dm-disabled{opacity:.45;cursor:default;pointer-events:none}
+  .dm-lock{font-size:13px;color:var(--muted);flex:0 0 auto;align-self:center}
+  .dm-hint{font-size:11px;color:var(--sage);text-align:center;padding:10px 18px 0;font-weight:500}
+
+  /* === ACHIEVEMENT MODAL === */
+  .ach-overlay{position:absolute;inset:0;background:rgba(13,20,19,.55);z-index:60;display:none;
+    align-items:center;justify-content:center;padding:26px;opacity:0;transition:opacity .25s ease}
+  .ach-overlay.open{display:flex;opacity:1}
+  .ach-card{background:var(--card);border-radius:24px;padding:30px 26px 26px;text-align:center;width:100%;
+    max-width:300px;box-shadow:0 24px 60px rgba(0,0,0,.4);position:relative;overflow:hidden;
+    transform:scale(.7);opacity:0}
+  .ach-overlay.open .ach-card{animation:achPop .55s cubic-bezier(.2,1.3,.4,1) forwards}
+  @keyframes achPop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+  .ach-glow{position:absolute;top:-40px;left:50%;width:200px;height:200px;transform:translateX(-50%);
+    background:radial-gradient(circle,rgba(242,183,51,.45),transparent 70%);pointer-events:none}
+  .ach-badge{width:92px;height:92px;border-radius:50%;margin:0 auto 14px;position:relative;z-index:1;
+    background:radial-gradient(circle at 50% 38%,#FCE9B6,#F2B733 70%);display:flex;align-items:center;justify-content:center;
+    font-size:46px;box-shadow:0 8px 22px rgba(242,183,51,.5)}
+  .ach-overlay.open .ach-badge{animation:badgeSpin .6s ease .15s backwards}
+  @keyframes badgeSpin{0%{transform:scale(0) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
+  .ach-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);font-weight:800;margin-bottom:5px}
+  .ach-title{font-size:23px;font-weight:800;margin:0 0 8px;color:var(--navy)}
+  .ach-sub{font-size:13.5px;color:var(--muted);margin:0 0 16px;line-height:1.45}
+  .ach-circ{display:inline-flex;align-items:center;background:#e4f0dc;color:var(--forest);font-weight:700;
+    font-size:13px;border-radius:999px;padding:6px 14px}
+  .ach-tap{font-size:11px;color:var(--muted);margin-top:16px}
+  /* confetti sparkles */
+  .ach-spark{position:absolute;width:8px;height:8px;border-radius:2px;z-index:2;opacity:0}
+  .ach-overlay.open .ach-spark{animation:sparkFall 1.1s ease-out .2s forwards}
+  @keyframes sparkFall{0%{opacity:1;transform:translateY(0) scale(1) rotate(0)}
+    100%{opacity:0;transform:translateY(120px) scale(.4) rotate(220deg)}}
+
+  /* relist context banner */
+  .relist-banner{display:flex;align-items:center;gap:10px;background:#e4f0dc;border:1px solid rgba(47,107,4,.25);
+    border-radius:12px;padding:10px 12px;margin-bottom:16px;font-size:13px;color:var(--forest)}
+  .relist-banner b{color:var(--forest)}
+  .preview-thumb-img{padding:0;overflow:hidden}
+  .preview-thumb-img img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body>
@@ -340,7 +401,7 @@
       <div id="borrow-detected-cat" style="display:none;margin-top:10px">
         <div class="field-label">Detected category</div>
         <div class="detected-row" style="margin-top:6px">
-          <span id="borrow-cat-chip" class="chip" onclick="go('s-results')"></span>
+          <span id="borrow-cat-chip" class="chip" onclick="runSearch()"></span>
           <span style="font-size:13px;color:var(--muted)">Tap to search</span>
         </div>
       </div>
@@ -353,7 +414,12 @@
           <div>
             <p class="bc-name">2-person backpacking tent</p>
             <div class="bc-sub">From Maya R. · Borrowed Jun 22</div>
+            <div class="bc-sub" style="color:var(--forest);font-weight:600;margin-top:3px">↻ Passed along 4× so far</div>
           </div>
+        </div>
+        <div class="ls-achievement" style="margin:11px 0 11px">
+          <span class="ls-medal">🏅</span>
+          <span class="ls-ach-text">This tent has been <strong>passed along 4×</strong> already. Pass it on again to make it <strong>5×</strong> and earn the <strong>Trail Keeper</strong> badge.</span>
         </div>
         <div class="bc-cta">
           <button class="btn-pass" onclick="openReturnSheet()">Pass it on</button>
@@ -362,97 +428,20 @@
       </div>
 
       <div class="qlabel">Leaving Soon?</div>
-      <div class="chips" style="padding-bottom:8px">
-        <span class="chip" onclick="startList()">＋ List gear you can't take home</span>
+      <div class="ls-card">
+        <div class="ls-header">
+          <div class="ls-icon">♻️</div>
+          <div>
+            <p class="ls-title">Your gear keeps traveling</p>
+            <p class="ls-sub">Leave something useful behind. Another traveler gets exactly what they need.</p>
+          </div>
+        </div>
+        <button class="btn-list-gear" onclick="startList()">+ List gear you can't take home</button>
       </div>
 
       <!-- Available nearby -->
       <div class="section-label">Available Near Waikiki</div>
-
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
-        <div class="meta">
-          <h3>2-person backpacking tent</h3>
-          <div class="row"><span class="dist">0.3 mi</span> · <span>Maya R.</span> <span class="badge free">Free</span> <span class="badge">↻ 4×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb thumb-gray"></div>
-        <div class="meta">
-          <h3>10-person Instant Cabin Tent</h3>
-          <div class="row"><span class="dist">0.5 mi</span> · <span>Devin K.</span> <span class="badge free">Free</span> <span class="badge">↻ 1×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/2 sleeping bags.jpg" alt="sleeping bags"></div>
-        <div class="meta">
-          <h3>2 sleeping bags</h3>
-          <div class="row"><span class="dist">0.8 mi</span> · <span>Sofia L.</span> <span class="badge free">Free</span> <span class="badge">↻ 2×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/camping stove.jpeg" alt="camp stove"></div>
-        <div class="meta">
-          <h3>Camp stove</h3>
-          <div class="row"><span class="dist">1.1 mi</span> · <span>Aaron M.</span> <span class="badge free">Free</span> <span class="badge">↻ 3×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/2 folding beach chairs and beach umbrella.jpg" alt="beach chairs"></div>
-        <div class="meta">
-          <h3>2 folding beach chairs and umbrella</h3>
-          <div class="row"><span class="dist">0.4 mi</span> · <span>Priya S.</span> <span class="badge free">Free</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/inflatable swim rings.jpg" alt="swim rings"></div>
-        <div class="meta">
-          <h3>2 inflatable swim rings</h3>
-          <div class="row"><span class="dist">0.2 mi</span> · <span>Jake T.</span> <span class="badge free">Free</span> <span class="badge">↻ 1×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/inflatable lounger.jpg" alt="aqua lounger"></div>
-        <div class="meta">
-          <h3>Inflatable aqua lounger</h3>
-          <div class="row"><span class="dist">0.6 mi</span> · <span>Mia C.</span> <span class="badge free">Free</span> <span class="badge">↻ 2×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/bucket of sand toys.jpg" alt="sand toys"></div>
-        <div class="meta">
-          <h3>Bucket of sand toys</h3>
-          <div class="row"><span class="dist">0.3 mi</span> · <span>Omar F.</span> <span class="badge free">Free</span> <span class="badge">↻ 5×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/inflatable mattress.jpg" alt="inflatable mattress"></div>
-        <div class="meta">
-          <h3>Twin sized inflatable mattress</h3>
-          <div class="row"><span class="dist">0.9 mi</span> · <span>Dana L.</span> <span class="badge free">Free</span> <span class="badge">↻ 1×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/Hisense dehumidifier.jpg" alt="dehumidifier"></div>
-        <div class="meta">
-          <h3>HiSense dehumidifier</h3>
-          <div class="row"><span class="dist">1.4 mi</span> · <span>Kai N.</span> <span class="badge free">Free</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/jack and mallet coconut kit.jpg" alt="coconut kit"></div>
-        <div class="meta">
-          <h3>Jack and mallet set for opening coconuts</h3>
-          <div class="row"><span class="dist">0.7 mi</span> · <span>Rosa H.</span> <span class="badge free">Free</span> <span class="badge">↻ 3×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/Greatwavejigsawpuzzle.png" alt="Puzzle"></div>
-        <div class="meta">
-          <h3>Great Wave 1000-piece jigsaw puzzle</h3>
-          <div class="row"><span class="dist">0.5 mi</span> · <span>Sam B.</span> <span class="badge free">Free</span> <span class="badge">↻ 1×</span></div>
-        </div>
-      </div>
+      <div id="home-feed"></div>
 
     </div>
     <div class="tab-bar">
@@ -482,24 +471,11 @@
       <div class="back" onclick="go('s-home')">‹</div>
     </div>
     <div class="results-search">
-      <div class="search"><span class="ic">⌕</span><input value="Tent" readonly></div>
+      <div class="search"><span class="ic">⌕</span><input id="results-query" value="Tent" readonly></div>
     </div>
     <div class="body" style="padding-top:0">
-      <div class="result-head"><b>2 available</b> within 1 mile · Waikiki</div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
-        <div class="meta">
-          <h3>2-person backpacking tent</h3>
-          <div class="row"><span class="dist">0.3 mi</span> · <span>Maya R.</span> <span class="badge free">Free</span> <span class="badge">↻ 4×</span></div>
-        </div>
-      </div>
-      <div class="item" onclick="go('s-detail')">
-        <div class="thumb" style="padding:0"><img src="images/10 person tent.jpeg" alt="cabin tent"></div>
-        <div class="meta">
-          <h3>10-person Instant Cabin Tent</h3>
-          <div class="row"><span class="dist">0.5 mi</span> · <span>Devin K.</span> <span class="badge free">Free</span> <span class="badge">↻ 1×</span></div>
-        </div>
-      </div>
+      <div class="result-head" id="results-head"></div>
+      <div id="results-list"></div>
     </div>
   </section>
 
@@ -507,33 +483,21 @@
   <section class="screen" id="s-detail">
     <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G</span></div>
     <div class="appbar">
-      <div class="back" onclick="go('s-results')">‹</div>
+      <div class="back" id="detail-back" onclick="go('s-results')">‹</div>
       <h1>Item details</h1>
     </div>
     <div class="body">
       <div class="gallery">
-        <div class="hero-photo" id="hero-photo">
-          <img src="images/2 person tent image 1.jpeg" alt="2-person backpacking tent">
-        </div>
-        <div class="page-dots" aria-hidden="true">
-          <span class="active"></span><span class="inactive"></span><span class="inactive"></span>
-        </div>
-        <div class="thumbs">
-          <button class="thumb-btn active" data-slide="0" data-type="img" data-src="images/2 person tent image 1.jpeg"><img src="images/2 person tent image 1.jpeg" alt=""></button>
-          <button class="thumb-btn" data-slide="1" data-type="img" data-src="images/2 person tent image 2.jpg"><img src="images/2 person tent image 2.jpg" alt=""></button>
-          <button class="thumb-btn" data-slide="2" data-type="emoji" data-emoji="📦">📦</button>
-        </div>
+        <div class="hero-photo" id="hero-photo"></div>
+        <div class="page-dots" id="page-dots" aria-hidden="true"></div>
+        <div class="thumbs" id="detail-thumbs"></div>
       </div>
       <div class="detail-title">
-        <h2>2-person backpacking tent</h2>
+        <h2 id="detail-name">Item</h2>
         <span class="freepill">Free</span>
       </div>
-      <p class="desc">Lightweight 3-season tent, ~2.4 kg, packs to a daypack. Used it for one night on this trip, can't take it home Friday. Works great, all stakes included.</p>
-      <div class="meta-chips">
-        <span class="chip-meta">↻ 4× circulated</span>
-        <span class="chip-meta">0.3 mi away</span>
-        <span class="chip-meta">★ 4.9</span>
-      </div>
+      <p class="desc" id="detail-desc"></p>
+      <div class="meta-chips" id="detail-meta-chips"></div>
       <div class="notforsale">
         <span>🛈</span><div><b>Not for sale.</b> TSE is for exchange only. Never send or accept money for an item.</div>
       </div>
@@ -542,30 +506,29 @@
         <div class="oc-title">Item origin</div>
         <div class="origin-row">
           <div class="origin-ic">📅</div>
-          <div><span class="od">First listed</span> <b>Mar 12, 2025 · Costa Rica</b></div>
+          <div><span class="od">First listed</span> <b id="origin-first"></b></div>
         </div>
         <div class="origin-row">
           <div class="origin-ic">👤</div>
-          <div><span class="od">Original lister</span> <b>Tomás V.</b></div>
+          <div><span class="od">Original lister</span> <b id="origin-lister"></b></div>
         </div>
         <div class="origin-row">
           <div class="origin-ic">↻</div>
-          <div><span class="od">Previous owners</span> <b>4 travelers</b></div>
+          <div><span class="od">Previous owners</span> <b id="origin-owners"></b></div>
         </div>
       </div>
-      <!-- Owner -->
-      <div class="owner" onclick="go('s-profile-other')">
-        <div class="avatar">M</div>
-        <div class="who">
-          <b>Maya R.</b>
-          <div class="sub">Waikiki · 0.3 mi <span class="verified">✓ Verified</span></div>
+      <!-- Owner + their track record, grouped -->
+      <div class="owner-card" onclick="go('s-profile-other')">
+        <div class="owner-head">
+          <div class="avatar" id="detail-owner-av">M</div>
+          <div class="who">
+            <b id="detail-owner-name">Owner</b>
+            <div class="sub" id="detail-owner-sub"></div>
+          </div>
+          <span style="color:var(--muted);font-size:20px">›</span>
         </div>
-        <span style="color:var(--muted);font-size:20px">›</span>
-      </div>
-      <div class="trust">
-        <div class="t"><div class="n">8</div><div class="l">exchanges</div></div>
-        <div class="t"><div class="n">4.9</div><div class="l">avg rating</div></div>
-        <div class="t"><div class="n">4</div><div class="l">items listed</div></div>
+        <div class="owner-stats-label">Owner's track record</div>
+        <div class="meta-chips" id="detail-owner-chips" style="margin:8px 0 2px"></div>
       </div>
     </div>
     <div class="foot foot-solid">
@@ -581,7 +544,7 @@
       <h1>Arrange a safe exchange</h1>
     </div>
     <div class="body">
-      <p class="desc" style="margin-bottom:14px;color:var(--muted)">Maya will get your request. Before you meet, a few ground rules.</p>
+      <p class="desc" style="margin-bottom:14px;color:var(--muted)" id="exchange-intro">Maya will get your request. Before you meet, a few ground rules.</p>
       <div class="safe-card">
         <div class="safe-row"><div class="safe-ic">📍</div><div class="st"><b>Meet in a well-lit public place</b><span>A cafe, lobby, or transit hub. Never at your room, hotel, or Airbnb.</span></div></div>
         <div class="safe-row"><div class="safe-ic">💸</div><div class="st"><b>No money changes hands</b><span>TSE is exchange-only. If anyone asks to be paid, cancel and report it.</span></div></div>
@@ -599,9 +562,9 @@
     <div class="statusbar"><span>9:41</span><span>5G</span></div>
     <div class="done">
       <div class="ring">✓</div>
-      <h2>Request sent to Maya</h2>
-      <p>You will get a notification when she confirms a public meeting spot near you.</p>
-      <p style="color:var(--forest);font-weight:600;margin-top:10px">When you return this tent to the exchange, it will be circulated 5× and you will earn the <b>Keep It Moving</b> badge.</p>
+      <h2 id="done-title">Request sent to Maya</h2>
+      <p id="done-sub">You will get a notification when she confirms a public meeting spot near you.</p>
+      <p style="color:var(--forest);font-weight:600;margin-top:10px" id="done-circ">When you return this item to the exchange, it keeps circulating and you earn the <b>Keep It Moving</b> badge.</p>
     </div>
     <div class="foot foot-solid">
       <button class="btn btn-primary" onclick="go('s-home')">Done</button>
@@ -614,6 +577,7 @@
     <div class="appbar" style="border-bottom:1px solid var(--line);padding-bottom:12px">
       <h1 style="font-size:20px;font-weight:800;margin-left:2px">Messages</h1>
     </div>
+    <div class="dm-hint">Demo: open the most recent conversation</div>
     <div class="dm-list">
       <div class="dm-item dm-unread" onclick="go('s-dm')">
         <div class="dm-av" style="background:linear-gradient(135deg,#3B52C4,#163A5F)">M</div>
@@ -626,37 +590,37 @@
           <div class="dm-dot"></div>
         </div>
       </div>
-      <div class="dm-item" onclick="go('s-dm')">
+      <div class="dm-item dm-disabled">
         <div class="dm-av" style="background:linear-gradient(135deg,#2F6B04,#6D885A)">T</div>
         <div class="dm-meta">
           <div class="dm-name">Tyler G.</div>
           <div class="dm-preview">Thanks! The surfboard leash was perfect, exactly what I needed.</div>
         </div>
-        <div class="dm-time">2h</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="dm-time">2h</div><span class="dm-lock">🔒</span></div>
       </div>
-      <div class="dm-item" onclick="go('s-dm')">
+      <div class="dm-item dm-disabled">
         <div class="dm-av" style="background:linear-gradient(135deg,#75C7C0,#3B52C4)">D</div>
         <div class="dm-meta">
           <div class="dm-name">Devin K.</div>
           <div class="dm-preview">Is the cabin tent still available? Checking out Sunday.</div>
         </div>
-        <div class="dm-time">Yesterday</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="dm-time">Yesterday</div><span class="dm-lock">🔒</span></div>
       </div>
-      <div class="dm-item" onclick="go('s-dm')">
+      <div class="dm-item dm-disabled">
         <div class="dm-av" style="background:linear-gradient(135deg,#F2B733,#E2403E)">P</div>
         <div class="dm-meta">
           <div class="dm-name">Priya S.</div>
           <div class="dm-preview">Perfect, see you at the hotel lobby at 3pm!</div>
         </div>
-        <div class="dm-time">Jun 21</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="dm-time">Jun 21</div><span class="dm-lock">🔒</span></div>
       </div>
-      <div class="dm-item" onclick="go('s-dm')">
+      <div class="dm-item dm-disabled">
         <div class="dm-av" style="background:linear-gradient(135deg,#163A5F,#6D885A)">S</div>
         <div class="dm-meta">
           <div class="dm-name">Sam B.</div>
           <div class="dm-preview">Puzzle is in great shape, all 1000 pieces confirmed.</div>
         </div>
-        <div class="dm-time">Jun 19</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="dm-time">Jun 19</div><span class="dm-lock">🔒</span></div>
       </div>
     </div>
     <div class="tab-bar">
@@ -726,7 +690,7 @@
     <div class="profile-body">
       <div class="profile-section">
         <div class="profile-section-label">Currently Borrowing</div>
-        <div class="pi-row" onclick="go('s-detail')">
+        <div class="pi-row" onclick="openDetail('tent2','s-profile-own')">
           <div class="pi-thumb"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
           <div class="pi-meta"><b>2-person backpacking tent</b><span>From Maya R. · Borrowed Jun 22</span></div>
         </div>
@@ -779,7 +743,7 @@
     <div class="profile-body">
       <div class="profile-section" style="padding-bottom:16px">
         <div class="profile-section-label">Currently Listing</div>
-        <div class="pi-row" onclick="go('s-detail')">
+        <div class="pi-row" onclick="openDetail('tent2','s-profile-other')">
           <div class="pi-thumb"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
           <div class="pi-meta"><b>2-person backpacking tent</b><span>Free · ↻ 4× circulated</span></div>
         </div>
@@ -816,8 +780,11 @@
 
   <section class="screen" id="s-list-details">
     <div class="statusbar"><span>9:41</span><span>5G</span></div>
-    <div class="appbar"><div class="back" onclick="go('s-home')">‹</div><h1>List an item</h1></div>
+    <div class="appbar"><div class="back" onclick="go('s-home')">‹</div><h1 id="details-title">List an item</h1></div>
     <div class="body">
+      <div class="relist-banner" id="relist-banner" style="display:none">
+        <span>♻️</span><div>Passing on the <b id="relist-item-name">item</b> you borrowed. We prefilled the details, just confirm a new pickup time.</div>
+      </div>
       <div class="field">
         <div class="field-label">Item name</div>
         <input id="list-name" type="text" placeholder="What are you listing?" oninput="updateListing()">
@@ -939,7 +906,7 @@
       </div>
       <div class="exchange-reminder"><span>🛈</span><div><b>No money, ever.</b> TSE is exchange only. If anyone asks to be paid, cancel and report it.</div></div>
     </div>
-    <div class="foot foot-solid"><button class="btn btn-primary" onclick="go('s-list-done')">List it</button></div>
+    <div class="foot foot-solid"><button class="btn btn-primary" id="btn-list-it" onclick="finishListing()">List it</button></div>
   </section>
 
   <section class="screen" id="s-list-done">
@@ -959,7 +926,7 @@
       <div class="sheet-handle"></div>
       <h3>2-person backpacking tent</h3>
       <p class="sh-sub">Borrowed Jun 22 · From Maya R.</p>
-      <button class="btn btn-primary" style="margin-bottom:16px" onclick="go('s-list-details');closeReturnSheet()">Pass it on to the next traveler</button>
+      <button class="btn btn-primary" style="margin-bottom:16px" onclick="startRelist()">Pass it on to the next traveler</button>
       <div class="field-label" style="margin-bottom:10px">Or let us know why you're not passing it on</div>
       <div class="multi-opt" onclick="toggleCheck(this)"><div class="mc"></div><span>Keeping it</span></div>
       <div class="multi-opt" onclick="toggleCheck(this)"><div class="mc"></div><span>Item consumed</span></div>
@@ -970,36 +937,99 @@
     </div>
   </div>
 
+  <!-- ── ACHIEVEMENT MODAL ──────────────────── -->
+  <div class="ach-overlay" id="ach-modal" onclick="closeAchievement()">
+    <div class="ach-card" onclick="event.stopPropagation()">
+      <div class="ach-glow"></div>
+      <div class="ach-badge">🏅</div>
+      <div class="ach-kicker">Achievement unlocked</div>
+      <h3 class="ach-title" id="ach-title">Trail Keeper</h3>
+      <p class="ach-sub" id="ach-sub">You passed the tent on to its next traveler in Waikiki. The loop keeps going.</p>
+      <div class="ach-circ" id="ach-circ">↻ 5× circulated</div>
+      <div class="ach-tap">Tap anywhere to continue</div>
+    </div>
+  </div>
+
 </div><!-- end .phone -->
 
 <!-- ===== SIDE CAPTION ===== -->
 <div class="caption">
   <div class="caption-tabs">
-    <button type="button" class="caption-tab active" data-cap="borrow" onclick="showCaption('borrow',this)">Flow 1 · Borrow</button>
-    <button type="button" class="caption-tab" data-cap="list" onclick="showCaption('list',this)">Flow 2 · List</button>
+    <button type="button" class="caption-tab active" data-cap="borrow" onclick="showCaption('borrow',this)">1 · Borrow</button>
+    <button type="button" class="caption-tab" data-cap="list" onclick="showCaption('list',this)">2 · List</button>
+    <button type="button" class="caption-tab" data-cap="relist" onclick="showCaption('relist',this)">3 · Pass it on</button>
   </div>
+
   <div class="caption-panel active" id="cap-borrow">
-    <h4>Get it today</h4>
+    <h4>Find and get gear nearby, today</h4>
     <ol>
-      <li><b>Splash + home feed.</b> Seeded Waikiki inventory. Borrowed item shows return prompt. <span class="step-link" onclick="go('s-home')">Home →</span></li>
-      <li><b>Matched nearby.</b> Distance and circulation count do the trust work. <span class="step-link" onclick="go('s-results')">Results →</span></li>
-      <li><b>Trust signals.</b> Item origin, owner profile, not-for-sale banner. <span class="step-link" onclick="go('s-detail')">Detail →</span></li>
-      <li><b>Safe exchange.</b> Safety as a designed screen, not fine print. <span class="step-link" onclick="go('s-exchange')">Exchange →</span></li>
-      <li><b>Messages.</b> DMs tied to items, 5 seeded conversations. <span class="step-link" onclick="go('s-messages')">Messages →</span></li>
-      <li><b>Profiles.</b> Own profile and another traveler's. <span class="step-link" onclick="go('s-profile-own')">My profile →</span></li>
+      <li><b>Home feed.</b> Seeded Waikiki inventory, closest first.
+        <span class="cap-value">Supply already exists near you. The problem is finding it, not buying more.</span>
+        <span class="step-link" onclick="go('s-home')">Home →</span></li>
+      <li><b>Search.</b> Type a need and the category auto-detects, then results filter.
+        <span class="cap-value">Fastest path to "what can I actually get right now."</span>
+        <span class="step-link" onclick="document.getElementById('borrow-search-input').value='tent';detectBorrowCategory();runSearch()">Results →</span></li>
+      <li><b>Item detail.</b> Photo gallery, plain one-line description, circulation count.
+        <span class="cap-value">You see exactly what you're picking up before you commit.</span>
+        <span class="step-link" onclick="openDetail('tent2','s-results')">Detail →</span></li>
+      <li><b>Trust, designed in.</b> Item origin and owner history, verified badge, ratings, not-for-sale banner.
+        <span class="cap-value">Trust between strangers is the product, not fine print.</span>
+        <span class="step-link" onclick="openDetail('tent2','s-results')">Origin →</span></li>
+      <li><b>Safe exchange.</b> Public meetup, no money, bring a friend.
+        <span class="cap-value">Safety gets its own screen instead of a buried disclaimer.</span>
+        <span class="step-link" onclick="go('s-exchange')">Exchange →</span></li>
+      <li><b>Messages.</b> DMs tied to the specific item.
+        <span class="cap-value">Coordination stays in context with what's being exchanged.</span>
+        <span class="step-link" onclick="go('s-messages')">Messages →</span></li>
+      <li><b>Profiles.</b> Exchanges, ratings, current listings.
+        <span class="cap-value">Reputation is what makes a stranger handoff feel safe.</span>
+        <span class="step-link" onclick="go('s-profile-other')">Profile →</span></li>
     </ol>
-    <div class="nb">MVP assumption: a traveler can find and safely get gear nearby, right now. Inventory is seeded for the demo.</div>
+    <div class="nb">Riskiest assumption the MVP tests: a traveler can find and safely get gear nearby, right now. Inventory is seeded for the demo.</div>
   </div>
+
   <div class="caption-panel" id="cap-list">
-    <h4>Pass it on</h4>
+    <h4>Leave useful gear behind, not in the trash</h4>
     <ol>
-      <li><b>Entry point.</b> "List gear you can't take home" on the home feed. <span class="step-link" onclick="go('s-home')">Home →</span></li>
-      <li><b>Auto-detected category.</b> Name drives detection. Condition sets quality. <span class="step-link" onclick="go('s-list-details')">Details →</span></li>
-      <li><b>Photo nudge.</b> Skip allowed, but trust note explains why photos matter. <span class="step-link" onclick="go('s-list-photo')">Photo →</span></li>
-      <li><b>Availability windows.</b> Day + time ranges, not departure date. <span class="step-link" onclick="go('s-list-logistics')">Logistics →</span></li>
-      <li><b>Preview parity.</b> Card matches Results view exactly. <span class="step-link" onclick="go('s-list-preview')">Preview →</span></li>
+      <li><b>Entry point.</b> "List gear you can't take home" lives right on the home feed.
+        <span class="cap-value">Meets the traveler at the leaving-soon moment, when the gear becomes a burden.</span>
+        <span class="step-link" onclick="go('s-home')">Home →</span></li>
+      <li><b>Details + auto-category.</b> The name drives category detection; condition sets quality.
+        <span class="cap-value">Less typing means more gear actually gets listed.</span>
+        <span class="step-link" onclick="startList()">Details →</span></li>
+      <li><b>Photo nudge.</b> Optional, but a note explains listings with photos get requested 3× more.
+        <span class="cap-value">Encourages trust without forcing friction.</span>
+        <span class="step-link" onclick="go('s-list-photo')">Photo →</span></li>
+      <li><b>Availability windows.</b> Pick days and time ranges, not a single departure date.
+        <span class="cap-value">Matches how travelers actually plan a handoff.</span>
+        <span class="step-link" onclick="go('s-list-logistics')">Logistics →</span></li>
+      <li><b>Preview parity.</b> The listing card is identical to the Results view.
+        <span class="cap-value">What you publish is exactly what the next traveler sees.</span>
+        <span class="step-link" onclick="go('s-list-preview')">Preview →</span></li>
+      <li><b>Live.</b> Confirmation, with the item's first circulation teased.
+        <span class="cap-value">Closes the supply side of the loop.</span>
+        <span class="step-link" onclick="go('s-list-done')">Done →</span></li>
     </ol>
-    <div class="nb">Flow 2 closes the supply side of the loop. Tap "List gear" on home to walk through it.</div>
+    <div class="nb">Flow 2 supplies the inventory Flow 1 depends on. Tap any step to jump to that screen.</div>
+  </div>
+
+  <div class="caption-panel" id="cap-relist">
+    <h4>Keep the loop going</h4>
+    <ol>
+      <li><b>Return prompt.</b> The borrowed item sits on home with a badge teaser.
+        <span class="cap-value">The return is prompted, so gear doesn't quietly leave the system.</span>
+        <span class="step-link" onclick="go('s-home')">Borrowed card →</span></li>
+      <li><b>Pass it on.</b> A sheet offers relisting, or asks why if you can't.
+        <span class="cap-value">Graceful exits when an item is consumed or worn out, not just dead ends.</span>
+        <span class="step-link" onclick="go('s-home');openReturnSheet()">Open sheet →</span></li>
+      <li><b>Prefilled relist.</b> Same listing flow, every field filled from the item you borrowed.
+        <span class="cap-value">Passing on is easier than the first listing ever was.</span>
+        <span class="step-link" onclick="startRelist()">Relist →</span></li>
+      <li><b>Achievement.</b> Finishing unlocks the Trail Keeper badge with an animation, then resets.
+        <span class="cap-value">The rewarded behavior is circulation, the hardest thing to get people to do.</span>
+        <span class="step-link" onclick="openAchievement()">See badge →</span></li>
+    </ol>
+    <div class="nb">This is the loop-closing behavior, the riskiest and most novel part of the concept. It turns a one-time borrow into ongoing circulation.</div>
   </div>
 </div>
 
@@ -1007,8 +1037,252 @@
   // ── State ──────────────────────────────────────────────────────
   var listing = {
     category:'', emoji:'⛺', name:'', condition:'',
-    description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false
+    description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false, isRelist:false, imageSrc:''
   };
+  var achTimer = null;
+
+  // ── Seeded inventory ───────────────────────────────────────────
+  var ITEMS = [
+    { id:'tent2', name:'2-person backpacking tent', cat:'Tent', emoji:'⛺', dist:'0.3',
+      images:['images/2 person tent image 1.jpeg','images/2 person tent image 2.jpg'],
+      desc:'Lightweight 3-season tent, about 2.4 kg, packs to a daypack. Used one night, can’t take it home Friday. All stakes included.',
+      condition:'Great', circ:4, rating:'4.9',
+      owner:{name:'Maya R.', initial:'M', grad:['#3B52C4','#163A5F'], loc:'Waikiki', verified:true},
+      origin:{first:'Mar 12, 2025 · Costa Rica', lister:'Tomás V.', owners:'4 travelers'},
+      trust:{ex:8, rate:'4.9', listed:4} },
+    { id:'cabin', name:'10-person Instant Cabin Tent', cat:'Tent', emoji:'⛺', dist:'0.5',
+      images:['images/10 person instant back packing tent.jpeg'],
+      desc:'Huge instant cabin tent, sets up in about two minutes. Great for a group. Too big to fly home with.',
+      condition:'Good', circ:1, rating:'4.7',
+      owner:{name:'Devin K.', initial:'D', grad:['#2F6B04','#6D885A'], loc:'Waikiki', verified:true},
+      origin:{first:'Jun 2, 2026 · Honolulu', lister:'Devin K.', owners:'1 traveler'},
+      trust:{ex:3, rate:'4.7', listed:2} },
+    { id:'sleeping', name:'2 sleeping bags', cat:'Sleeping bag', emoji:'🛌', dist:'0.8',
+      images:['images/2 sleeping bags.jpg'],
+      desc:'Pair of 3-season sleeping bags, both clean and recently aired out. Comfortable down to about 40°F.',
+      condition:'Good', circ:2, rating:'4.8',
+      owner:{name:'Sofia L.', initial:'S', grad:['#75C7C0','#3B52C4'], loc:'Waikiki', verified:true},
+      origin:{first:'Apr 8, 2026 · Maui', lister:'Sofia L.', owners:'2 travelers'},
+      trust:{ex:5, rate:'4.8', listed:3} },
+    { id:'stove', name:'Camp stove', cat:'Camp stove', emoji:'🔥', dist:'1.1',
+      images:['images/camping stove.jpeg','images/camp stove image 2.jpg'],
+      desc:'Single-burner backpacking stove with windscreen. Boils fast. Fuel canister not included.',
+      condition:'Great', circ:3, rating:'4.9',
+      owner:{name:'Aaron M.', initial:'A', grad:['#F2B733','#E2403E'], loc:'Waikiki', verified:true},
+      origin:{first:'Jan 20, 2026 · Big Island', lister:'Aaron M.', owners:'3 travelers'},
+      trust:{ex:11, rate:'4.9', listed:6} },
+    { id:'chairs', name:'2 folding beach chairs and umbrella', cat:'Beach chair', emoji:'🪑', dist:'0.4',
+      images:['images/2 folding beach chairs and beach umbrella.jpg'],
+      desc:'Two low folding beach chairs plus a clamp-on umbrella. A little sandy but solid. Perfect for a beach day.',
+      condition:'Good', circ:0, rating:'5.0',
+      owner:{name:'Priya S.', initial:'P', grad:['#163A5F','#6D885A'], loc:'Waikiki', verified:true},
+      origin:{first:'Jun 18, 2026 · Waikiki', lister:'Priya S.', owners:'First listing'},
+      trust:{ex:2, rate:'5.0', listed:1} },
+    { id:'swimrings', name:'2 inflatable swim rings', cat:'Other gear', emoji:'🛟', dist:'0.2',
+      images:['images/inflatable swim rings.jpg'],
+      desc:'Two inflatable swim rings, no leaks. Fun for the kids or a lazy float. Deflates flat to pack.',
+      condition:'Good', circ:1, rating:'4.6',
+      owner:{name:'Jake T.', initial:'J', grad:['#3B52C4','#75C7C0'], loc:'Waikiki', verified:true},
+      origin:{first:'May 30, 2026 · Waikiki', lister:'Jake T.', owners:'1 traveler'},
+      trust:{ex:4, rate:'4.6', listed:2} },
+    { id:'lounger', name:'Inflatable aqua lounger', cat:'Other gear', emoji:'🏖️', dist:'0.6',
+      images:['images/inflatable lounger.jpg'],
+      desc:'Air lounger that inflates by scooping air, no pump needed. Great for the beach or park. Packs into its own bag.',
+      condition:'Great', circ:2, rating:'4.8',
+      owner:{name:'Mia C.', initial:'M', grad:['#2F6B04','#3B52C4'], loc:'Waikiki', verified:true},
+      origin:{first:'Mar 25, 2026 · Kauai', lister:'Mia C.', owners:'2 travelers'},
+      trust:{ex:6, rate:'4.8', listed:3} },
+    { id:'sandtoys', name:'Bucket of sand toys', cat:'Other gear', emoji:'🪣', dist:'0.3',
+      images:['images/bucket of sand toys.jpg'],
+      desc:'Full bucket of sand toys: molds, shovels, a rake. Great for families. Just rinse the sand off.',
+      condition:'Good', circ:5, rating:'4.9',
+      owner:{name:'Omar F.', initial:'O', grad:['#F2B733','#2F6B04'], loc:'Waikiki', verified:true},
+      origin:{first:'Dec 5, 2025 · San Diego', lister:'Omar F.', owners:'5 travelers'},
+      trust:{ex:9, rate:'4.9', listed:4} },
+    { id:'mattress', name:'Twin sized inflatable mattress', cat:'Other gear', emoji:'🛏️', dist:'0.9',
+      images:['images/inflatable mattress.jpg'],
+      desc:'Twin air mattress, holds air through the night. Pump included. Handy for an extra guest.',
+      condition:'Good', circ:1, rating:'4.5',
+      owner:{name:'Dana L.', initial:'D', grad:['#75C7C0','#163A5F'], loc:'Waikiki', verified:true},
+      origin:{first:'Apr 14, 2026 · Honolulu', lister:'Dana L.', owners:'1 traveler'},
+      trust:{ex:3, rate:'4.5', listed:2} },
+    { id:'dehumidifier', name:'HiSense dehumidifier', cat:'Other gear', emoji:'💧', dist:'1.4',
+      images:['images/Hisense dehumidifier.jpg'],
+      desc:'Compact dehumidifier, keeps a humid room dry. Works perfectly. Too heavy to check on a flight.',
+      condition:'Great', circ:0, rating:'4.7',
+      owner:{name:'Kai N.', initial:'K', grad:['#163A5F','#3B52C4'], loc:'Waikiki', verified:true},
+      origin:{first:'Jun 10, 2026 · Hilo', lister:'Kai N.', owners:'First listing'},
+      trust:{ex:2, rate:'4.7', listed:1} },
+    { id:'coconut', name:'Jack and mallet set for opening coconuts', cat:'Other gear', emoji:'🥥', dist:'0.7',
+      images:['images/jack and mallet coconut kit.jpg'],
+      desc:'Coconut opening kit with a jack and mallet. Makes fresh coconuts easy. A true island essential.',
+      condition:'Good', circ:3, rating:'5.0',
+      owner:{name:'Rosa H.', initial:'R', grad:['#2F6B04','#F2B733'], loc:'Waikiki', verified:true},
+      origin:{first:'Feb 2, 2026 · Big Island', lister:'Rosa H.', owners:'3 travelers'},
+      trust:{ex:7, rate:'5.0', listed:4} },
+    { id:'puzzle', name:'Great Wave 1000-piece jigsaw puzzle', cat:'Other gear', emoji:'🧩', dist:'0.5',
+      images:['images/Greatwavejigsawpuzzle.png'],
+      desc:'1000-piece Great Wave puzzle, all pieces confirmed. A great rainy-day activity for the rental.',
+      condition:'Great', circ:1, rating:'4.8',
+      owner:{name:'Sam B.', initial:'S', grad:['#3B52C4','#6D885A'], loc:'Waikiki', verified:true},
+      origin:{first:'May 12, 2026 · Honolulu', lister:'Sam B.', owners:'1 traveler'},
+      trust:{ex:4, rate:'4.8', listed:2} }
+  ];
+
+  function itemById(id){ return ITEMS.filter(function(x){ return x.id===id; })[0]; }
+
+  function cardHTML(it, from){
+    var circ = it.circ>0 ? ' <span class="badge">↻ '+it.circ+'×</span>' : '';
+    return '<div class="item" onclick="openDetail(\''+it.id+'\',\''+from+'\')">'+
+      '<div class="thumb" style="padding:0"><img src="'+it.images[0]+'" alt=""></div>'+
+      '<div class="meta"><h3>'+it.name+'</h3>'+
+      '<div class="row"><span class="dist">'+it.dist+' mi</span> · <span>'+it.owner.name+'</span> '+
+      '<span class="badge free">Free</span>'+circ+'</div></div></div>';
+  }
+
+  function renderHome(){
+    document.getElementById('home-feed').innerHTML =
+      ITEMS.map(function(it){ return cardHTML(it,'s-home'); }).join('');
+  }
+
+  function runSearch(){
+    var q = (document.getElementById('borrow-search-input').value||'').trim() || 'gear';
+    var r = detectCategory(q);
+    document.getElementById('results-query').value = q;
+    var matches = ITEMS.filter(function(x){ return x.cat===r.cat; });
+    if(matches.length===0) matches = ITEMS.slice();
+    document.getElementById('results-list').innerHTML =
+      matches.map(function(it){ return cardHTML(it,'s-results'); }).join('');
+    document.getElementById('results-head').innerHTML =
+      '<b>'+matches.length+' available</b> within 1 mile · Waikiki';
+    go('s-results');
+  }
+
+  // ── Item detail (data-driven) ──────────────────────────────────
+  function openDetail(id, from){
+    var it = itemById(id); if(!it) return;
+    document.getElementById('detail-back').setAttribute('onclick', "go('"+(from||'s-home')+"')");
+    buildGallery(it);
+    document.getElementById('detail-name').textContent = it.name;
+    document.getElementById('detail-desc').textContent = it.desc;
+    var circLabel = it.circ>0 ? '↻ '+it.circ+'× circulated' : 'New to TSE';
+    document.getElementById('detail-meta-chips').innerHTML =
+      '<span class="chip-meta">'+circLabel+'</span>'+
+      '<span class="chip-meta">'+it.dist+' mi away</span>'+
+      '<span class="chip-meta">★ '+it.rating+'</span>';
+    document.getElementById('origin-first').textContent = it.origin.first;
+    document.getElementById('origin-lister').textContent = it.origin.lister;
+    document.getElementById('origin-owners').textContent = it.origin.owners;
+    var av = document.getElementById('detail-owner-av');
+    av.textContent = it.owner.initial;
+    av.style.background = 'linear-gradient(135deg,'+it.owner.grad[0]+','+it.owner.grad[1]+')';
+    document.getElementById('detail-owner-name').textContent = it.owner.name;
+    document.getElementById('detail-owner-sub').innerHTML =
+      it.owner.loc+' · '+it.dist+' mi'+(it.owner.verified?' <span class="verified">✓ Verified</span>':'');
+    document.getElementById('detail-owner-chips').innerHTML =
+      '<span class="chip-meta">'+it.trust.ex+' exchanges</span>'+
+      '<span class="chip-meta">★ '+it.trust.rate+' rating</span>'+
+      '<span class="chip-meta">'+it.trust.listed+' items listed</span>';
+    document.getElementById('exchange-intro').textContent =
+      it.owner.name+' will get your request. Before you meet, a few ground rules.';
+    document.getElementById('done-title').textContent = 'Request sent to '+it.owner.name;
+    document.getElementById('done-sub').textContent =
+      'You will get a notification when they confirm a public meeting spot near you.';
+    document.getElementById('done-circ').innerHTML =
+      'When you return this item to the exchange, it keeps circulating and you earn the <b>Keep It Moving</b> badge.';
+    go('s-detail');
+  }
+
+  function buildGallery(it){
+    document.getElementById('hero-photo').innerHTML = '<img src="'+it.images[0]+'" alt="">';
+    var thumbs = '';
+    it.images.forEach(function(src, i){
+      thumbs += '<button class="thumb-btn'+(i===0?' active':'')+'" onclick="selectSlide(this,'+i+',\'img\',\''+src+'\')"><img src="'+src+'" alt=""></button>';
+    });
+    var emojiIdx = it.images.length;
+    thumbs += '<button class="thumb-btn" onclick="selectSlide(this,'+emojiIdx+',\'emoji\',\''+it.emoji+'\')">'+it.emoji+'</button>';
+    document.getElementById('detail-thumbs').innerHTML = thumbs;
+    var dots = '';
+    for(var d=0; d<it.images.length+1; d++){ dots += '<span class="'+(d===0?'active':'inactive')+'"></span>'; }
+    document.getElementById('page-dots').innerHTML = dots;
+  }
+
+  function selectSlide(btn, idx, type, val){
+    document.querySelectorAll('#detail-thumbs .thumb-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('#page-dots span').forEach(function(d,i){ d.className = i===idx?'active':'inactive'; });
+    var hero = document.getElementById('hero-photo');
+    hero.innerHTML = type==='img' ? '<img src="'+val+'" alt="">' : '<span class="emoji">'+val+'</span>';
+  }
+
+  // ── Relist (prefilled pass-on) ─────────────────────────────────
+  function startRelist(){
+    closeReturnSheet();
+    var t = itemById('tent2');
+    listing = { category:'Tent', emoji:'⛺', name:t.name, condition:'Great',
+      description:'Borrowed in Waikiki and passing it on. '+t.desc, hasPhoto:true,
+      imageSrc:t.images[0], timeRanges:[], meetup:'', categoryOverridden:true, isRelist:true };
+    document.getElementById('details-title').textContent = 'Pass it on';
+    document.getElementById('relist-banner').style.display = '';
+    document.getElementById('relist-item-name').textContent = t.name;
+    document.getElementById('list-name').value = listing.name;
+    document.getElementById('list-desc').value = listing.description;
+    document.getElementById('desc-count').textContent = listing.description.length;
+    document.getElementById('detected-chip').textContent = '⛺ Tent';
+    document.getElementById('detected-cat-field').style.display = '';
+    document.getElementById('cat-override').style.display = 'none';
+    document.querySelectorAll('#condition-chips .chip-selectable').forEach(function(c){
+      c.classList.toggle('selected', c.dataset.val==='Great');
+    });
+    var z = document.getElementById('photo-zone');
+    z.className = 'photo-zone has-photo';
+    z.innerHTML = '<div class="photo-preview" style="padding:0;height:200px"><img src="'+listing.imageSrc+'" style="width:100%;height:100%;object-fit:cover" alt=""></div>';
+    document.getElementById('photo-trust-note').style.display = 'none';
+    document.getElementById('btn-photo-next').disabled = false;
+    document.getElementById('time-ranges').innerHTML = '';
+    document.getElementById('time-picker-form').style.display = 'none';
+    document.getElementById('list-meetup').value = '';
+    document.getElementById('btn-logistics-next').disabled = true;
+    validateDetails();
+    go('s-list-details');
+  }
+
+  function finishListing(){
+    if(listing.isRelist){ openAchievement(); }
+    else { go('s-list-done'); }
+  }
+
+  // ── Achievement modal ──────────────────────────────────────────
+  function spawnSparks(){
+    var card = document.querySelector('#ach-modal .ach-card');
+    card.querySelectorAll('.ach-spark').forEach(function(s){ s.remove(); });
+    var colors = ['#3B52C4','#2F6B04','#F2B733','#75C7C0','#E2403E'];
+    for(var i=0;i<14;i++){
+      var s = document.createElement('span');
+      s.className = 'ach-spark';
+      s.style.background = colors[i%colors.length];
+      s.style.left = (8+Math.random()*84)+'%';
+      s.style.top = (8+Math.random()*34)+'%';
+      s.style.animationDelay = (Math.random()*0.35)+'s';
+      card.appendChild(s);
+    }
+  }
+
+  function openAchievement(){
+    document.getElementById('ach-title').textContent = 'Trail Keeper';
+    document.getElementById('ach-sub').textContent = 'You passed the tent on to its next traveler in Waikiki. The loop keeps going.';
+    document.getElementById('ach-circ').textContent = '↻ 5× circulated';
+    spawnSparks();
+    document.getElementById('ach-modal').classList.add('open');
+    achTimer = setTimeout(closeAchievement, 4500);
+  }
+
+  function closeAchievement(){
+    clearTimeout(achTimer);
+    document.getElementById('ach-modal').classList.remove('open');
+    resetListFlow();
+    go('s-home');
+  }
 
   // ── Splash ─────────────────────────────────────────────────────
   setTimeout(function(){ go('s-home'); }, 2500);
@@ -1029,7 +1303,8 @@
     tab.classList.add('active');
     document.getElementById('cap-'+which).classList.add('active');
     if(which === 'borrow') go('s-home');
-    if(which === 'list')   resetListFlow();
+    if(which === 'list'){ resetListFlow(); go('s-list-details'); }
+    if(which === 'relist') go('s-home');
   }
 
   // ── Return bottom sheet ────────────────────────────────────────
@@ -1051,7 +1326,9 @@
 
   // ── List flow ──────────────────────────────────────────────────
   function resetListFlow(){
-    listing = { category:'', emoji:'⛺', name:'', condition:'', description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false };
+    listing = { category:'', emoji:'⛺', name:'', condition:'', description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false, isRelist:false, imageSrc:'' };
+    document.getElementById('details-title').textContent = 'List an item';
+    document.getElementById('relist-banner').style.display = 'none';
     document.getElementById('list-name').value = '';
     document.getElementById('list-desc').value = '';
     document.getElementById('desc-count').textContent = '0';
@@ -1065,7 +1342,6 @@
     document.getElementById('time-picker-form').style.display = 'none';
     document.getElementById('list-meetup').value = '';
     document.getElementById('btn-logistics-next').disabled = true;
-    go('s-list-details');
   }
 
   function startList(){
@@ -1075,6 +1351,7 @@
     tab.classList.add('active');
     document.getElementById('cap-list').classList.add('active');
     resetListFlow();
+    go('s-list-details');
   }
 
   function pickCategory(el){
@@ -1216,28 +1493,28 @@
   }
 
   function renderPreview(){
-    document.getElementById('preview-thumb').textContent = listing.emoji;
+    var thumb = document.getElementById('preview-thumb');
+    if(listing.imageSrc){
+      thumb.className = 'thumb preview-thumb-img';
+      thumb.innerHTML = '<img src="'+listing.imageSrc+'" alt="">';
+    } else {
+      thumb.className = 'thumb t-tent';
+      thumb.textContent = listing.emoji;
+    }
     document.getElementById('preview-name').textContent = listing.name;
     document.getElementById('preview-meetup').textContent = listing.meetup || 'Near you';
     document.getElementById('list-done-title').textContent = 'Your '+listing.name+' is live';
   }
 
-  // gallery thumb buttons
-  document.querySelectorAll('.thumb-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelectorAll('.thumb-btn').forEach(function(b){ b.classList.remove('active'); });
-      btn.classList.add('active');
-      var hero = document.getElementById('hero-photo');
-      var dots = document.querySelectorAll('.page-dots span');
-      var slide = Number(btn.dataset.slide);
-      dots.forEach(function(d,i){ d.className = i===slide ? 'active' : 'inactive'; });
-      if(btn.dataset.type === 'img'){
-        hero.innerHTML = '<img src="'+btn.dataset.src+'" alt="tent">';
-      } else {
-        hero.innerHTML = '<span class="emoji">'+btn.dataset.emoji+'</span>';
-      }
-    });
-  });
+  // ── Init ───────────────────────────────────────────────────────
+  renderHome();
+  (function(){
+    var tentMatches = ITEMS.filter(function(x){ return x.cat==='Tent'; });
+    document.getElementById('results-list').innerHTML =
+      tentMatches.map(function(it){ return cardHTML(it,'s-results'); }).join('');
+    document.getElementById('results-head').innerHTML =
+      '<b>'+tentMatches.length+' available</b> within 1 mile · Waikiki';
+  })();
 </script>
 </body>
 </html>
