@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Traveler Supply Exchange — MVP</title>
+<title>Traveler Supply Exchange</title>
 <style>
   :root{
     --ink:#13211f; --muted:#6b7b78; --line:rgba(19,33,31,.10);
@@ -80,6 +80,24 @@
   .trust .t .n{font-size:19px;font-weight:800;color:var(--accent-deep)}
   .trust .t .l{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3}
   .desc{font-size:14px;color:#33403d;margin:6px 0 0}
+  /* item gallery */
+  .gallery{margin:4px 0 14px}
+  .hero-photo{height:220px;border-radius:18px;overflow:hidden;background:#e8f4ec;display:flex;align-items:center;justify-content:center}
+  .hero-photo img{width:100%;height:100%;object-fit:cover}
+  .hero-photo .emoji{font-size:74px}
+  .page-dots{display:flex;align-items:center;justify-content:center;gap:6px;margin:10px 0}
+  .page-dots span{border-radius:50%;background:#c5d5cf;display:block}
+  .page-dots .active{width:8px;height:8px;background:var(--accent)}
+  .page-dots .inactive{width:6px;height:6px}
+  .thumbs{display:flex;gap:8px}
+  .thumb-btn{width:72px;height:72px;border-radius:12px;border:1px solid #e4e8e4;background:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;padding:0}
+  .thumb-btn.active{border:2px solid #2f9d6a;background:#e8f4ec}
+  .meta-chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+  .chip-meta{display:inline-flex;align-items:center;background:#edf5f0;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:600;color:#1f7a52}
+  .results-search{padding:4px 18px 10px;flex:0 0 auto}
+  .results-search .search{margin:0}
+  .appbar.compact{padding-bottom:4px}
+  .foot-solid{background:#fff;border-top:1px solid #e4e8e4;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
   /* exchange screen */
   .safe-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 4px;margin:6px 0 16px}
   .safe-row{display:flex;gap:13px;align-items:flex-start;padding:13px 14px;border-bottom:1px solid var(--line)}
@@ -90,7 +108,7 @@
   .legal{background:#fbf3da;border:1px solid rgba(247,179,43,.45);border-radius:12px;padding:11px 13px;font-size:12.5px;color:#8a6a14;margin-bottom:14px}
   /* success */
   .done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
-  .done .ring{width:88px;height:88px;border-radius:50%;background:#e7f3ee;display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:18px}
+  .done .ring{width:88px;height:88px;border-radius:50%;background:#e7f3ee;display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:18px;color:#1f7a52;font-weight:700}
   .done h2{font-size:22px;margin:0 0 6px}
   .done p{color:var(--muted);margin:0 0 6px;max-width:260px}
   /* footer button */
@@ -106,6 +124,53 @@
   .caption li{margin:8px 0}
   .caption .nb{margin-top:16px;font-size:12.5px;color:#6b7b78;border-top:1px solid rgba(19,33,31,.12);padding-top:12px}
   @media(max-width:880px){.caption{max-width:390px}}
+  /* list flow */
+  .step-hint{font-size:13px;color:var(--muted);margin:0 0 16px}
+  .field{margin-bottom:18px}
+  .field-label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 8px;font-weight:700}
+  .field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px 15px;font-size:15px;
+    background:var(--card);color:var(--ink);font-family:inherit;outline:0;box-shadow:0 2px 8px rgba(19,33,31,.04)}
+  .field textarea{resize:none;min-height:88px;line-height:1.45}
+  .field input:focus,.field textarea:focus{border-color:rgba(18,116,117,.45)}
+  .char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:5px}
+  .chip-selectable{cursor:pointer;user-select:none}
+  .chip-selectable.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .chip-selectable.selected:active{background:var(--accent-deep)}
+  .photo-zone{border:2px dashed rgba(19,33,31,.18);border-radius:16px;padding:28px 16px;text-align:center;background:var(--card);margin:8px 0 14px}
+  .photo-zone.has-photo{border-style:solid;border-color:var(--accent);padding:0;overflow:hidden}
+  .photo-zone .ph-ic{font-size:40px;margin-bottom:8px}
+  .photo-zone p{margin:0;color:var(--muted);font-size:13px}
+  .photo-actions{display:flex;gap:10px;margin-top:14px;justify-content:center}
+  .photo-actions .chip{margin:0}
+  .photo-preview{height:200px;display:flex;align-items:center;justify-content:center;font-size:64px;background:#e8f1ef}
+  .photo-note{display:flex;gap:9px;align-items:flex-start;background:#fbf3da;border:1px solid rgba(247,179,43,.4);
+    border-radius:10px;padding:10px 12px;font-size:12.5px;color:#8a6a14;margin-bottom:14px}
+  .preview-label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 10px;font-weight:700}
+  .preview-card{margin-bottom:14px}
+  .exchange-reminder{display:flex;gap:9px;align-items:flex-start;background:#e7f3ee;border:1px solid rgba(31,122,82,.25);
+    border-radius:12px;padding:11px 13px;font-size:13px;color:#1f7a52;margin-bottom:8px}
+  .caption-tabs{display:flex;gap:8px;margin-bottom:12px}
+  .caption-tab{background:transparent;border:1px solid rgba(19,33,31,.15);border-radius:999px;padding:6px 12px;
+    font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+  .caption-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .caption-panel{display:none}
+  .caption-panel.active{display:block}
+  /* time range cards */
+  .time-range-card{display:flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 15px;margin-bottom:10px}
+  .trc-main{flex:1}
+  .trc-day{font-size:15px;font-weight:600}
+  .trc-time{font-size:13px;color:var(--muted);margin-top:2px}
+  .trc-remove{width:28px;height:28px;border-radius:50%;border:0;background:var(--chip);color:var(--muted);font-size:18px;cursor:pointer;flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
+  /* add time range button */
+  .btn-add-range{width:100%;border:1px solid var(--accent);border-radius:14px;padding:13px 15px;background:var(--card);color:var(--accent);font-size:15px;font-weight:600;cursor:pointer;text-align:center;display:block}
+  .btn-add-range:active{background:#f0fafa}
+  /* time picker form */
+  .time-picker-form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-top:10px}
+  .tp-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+  .tp-select{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:14px;background:var(--bg);color:var(--ink);font-family:inherit;outline:0;min-width:0}
+  /* detected category */
+  .detected-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .change-link{font-size:13px;color:var(--accent);cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
@@ -116,7 +181,7 @@
 
   <!-- SCREEN 1: HOME / SEARCH NEED -->
   <section class="screen active" id="s-home">
-    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
     <div class="brand">
       <div class="logo"><span class="dot">⇄</span> Traveler Supply Exchange</div>
       <p class="tag">Borrow what your trip needs. Pass on what it leaves behind.</p>
@@ -137,7 +202,7 @@
       </div>
       <div class="qlabel">Leaving soon?</div>
       <div class="chips">
-        <span class="chip" onclick="go('s-results')">＋ List gear you can't take home</span>
+        <span class="chip" onclick="startList()">＋ List gear you can't take home</span>
       </div>
       <div class="seed-note">Demo note: inventory is seeded for this prototype. In the real product, supply comes from nearby travelers, partner accommodations, and drop hubs, matched to your location.</div>
     </div>
@@ -145,12 +210,17 @@
 
   <!-- SCREEN 2: RESULTS -->
   <section class="screen" id="s-results">
-    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
-    <div class="appbar">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="appbar compact">
       <div class="back" onclick="go('s-home')">‹</div>
-      <h1>Tents near you</h1>
     </div>
-    <div class="body">
+    <div class="results-search">
+      <div class="search">
+        <span class="ic">⌕</span>
+        <input value="Tent" readonly>
+      </div>
+    </div>
+    <div class="body" style="padding-top:0">
       <div class="result-head"><b>4 available</b> within 2 miles · Playa Hermosa</div>
 
       <div class="item" onclick="go('s-detail')">
@@ -195,40 +265,45 @@
       <h1>Item details</h1>
     </div>
     <div class="body">
-      <div class="hero-img t-tent">⛺</div>
+      <div class="gallery">
+        <div class="hero-photo" id="hero-photo">
+          <img src="assets/tent-hero.png" alt="2-person backpacking tent">
+        </div>
+        <div class="page-dots" aria-hidden="true">
+          <span class="active"></span><span class="inactive"></span><span class="inactive"></span>
+        </div>
+        <div class="thumbs">
+          <button type="button" class="thumb-btn active" data-slide="0" data-type="img" data-src="assets/tent-hero.png" aria-label="Tent photo">⛺</button>
+          <button type="button" class="thumb-btn" data-slide="1" data-type="emoji" data-emoji="🏕️" aria-label="Campsite photo">🏕️</button>
+          <button type="button" class="thumb-btn" data-slide="2" data-type="emoji" data-emoji="📦" aria-label="Packed tent">📦</button>
+        </div>
+      </div>
       <div class="detail-title">
         <h2>2-person backpacking tent</h2>
         <span class="freepill">Free</span>
       </div>
       <p class="desc">Lightweight 3-season tent, ~2.4 kg, packs to a daypack. Used it for one night on this trip, can't take it home Friday. Works great, all stakes included.</p>
-
+      <div class="meta-chips">
+        <span class="chip-meta">↻ 4× circulated</span>
+        <span class="chip-meta">0.3 mi away</span>
+        <span class="chip-meta">★ 4.9</span>
+      </div>
       <div class="notforsale">
-        <span>🛈</span><div><b>Not for sale.</b> TSE is for exchange only. Never send or accept money for an item, report anyone who asks.</div>
-      </div>
-
-      <div class="owner">
-        <div class="avatar">M</div>
-        <div class="who"><b>Maya R.</b> <span class="verified">✓ ID verified</span><div class="sub">12 exchanges · returns gear in great shape</div></div>
-      </div>
-
-      <div class="trust">
-        <div class="t"><div class="n">↻ 4×</div><div class="l">Re-circulated by travelers</div></div>
-        <div class="t"><div class="n">0.3 mi</div><div class="l">From your location</div></div>
-        <div class="t"><div class="n">★ 4.9</div><div class="l">Exchange rating</div></div>
+        <span>🛈</span><div><b>Not for sale.</b> TSE is for exchange only. Never send or accept money for an item.</div>
       </div>
     </div>
-    <div class="foot"><button class="btn btn-primary" onclick="go('s-exchange')">Request this item</button></div>
+    <div class="foot foot-solid"><button class="btn btn-primary" onclick="go('s-exchange')">Request this item</button></div>
   </section>
 
   <!-- SCREEN 4: SAFE EXCHANGE -->
   <section class="screen" id="s-exchange">
-    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
     <div class="appbar">
       <div class="back" onclick="go('s-detail')">‹</div>
       <h1>Arrange a safe exchange</h1>
     </div>
     <div class="body">
-      <p class="desc" style="margin-bottom:14px">Maya will get your request. Before you meet, a few ground rules to keep the exchange safe.</p>
+      <p class="desc" style="margin-bottom:14px;color:var(--muted)">Maya will get your request. Before you meet, a few ground rules to keep the exchange safe.</p>
       <div class="safe-card">
         <div class="safe-row"><div class="safe-ic">📍</div><div class="st"><b>Meet in a well-lit public place</b><span>A cafe, lobby, or transit hub. Never at your room, hotel, or Airbnb.</span></div></div>
         <div class="safe-row"><div class="safe-ic">💸</div><div class="st"><b>No money changes hands</b><span>TSE is exchange-only. If anyone asks to be paid, cancel and report it.</span></div></div>
@@ -236,22 +311,201 @@
       </div>
       <div class="legal">⚖️ If an item is illegal to possess in the country you're in, it's illegal to exchange on TSE. Don't list or accept it.</div>
     </div>
-    <div class="foot">
-      <button class="btn btn-primary" onclick="go('s-done')">Send request &amp; suggest a meeting spot</button>
-      <button class="btn btn-ghost" onclick="go('s-detail')">Back</button>
+    <div class="foot foot-solid">
+      <button class="btn btn-primary" onclick="go('s-done')">Send request and suggest a meeting spot</button>
     </div>
   </section>
 
   <!-- SCREEN 5: SUCCESS -->
   <section class="screen" id="s-done">
-    <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp; 5G &nbsp; ▢</span></div>
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
     <div class="done">
       <div class="ring">✓</div>
       <h2>Request sent to Maya</h2>
-      <p>You'll get a notification when she confirms a public meeting spot near you.</p>
-      <p style="color:#1f7a52;font-weight:600;margin-top:10px">When you return this tent to the exchange, it'll be circulated 5× — and you'll earn the <b>Keep&nbsp;It&nbsp;Moving</b> badge.</p>
+      <p>You will get a notification when she confirms a public meeting spot near you.</p>
+      <p style="color:#1f7a52;font-weight:600;margin-top:10px">When you return this tent to the exchange, it will be circulated 5×, and you will earn the <b>Keep&nbsp;It&nbsp;Moving</b> badge.</p>
     </div>
-    <div class="foot">
+    <div class="foot foot-solid">
+      <button class="btn btn-primary" onclick="go('s-home')">Done</button>
+    </div>
+  </section>
+
+  <!-- FLOW 2: LIST — CATEGORY -->
+  <section class="screen" id="s-list-category">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-home')">‹</div>
+      <h1>List an item</h1>
+    </div>
+    <div class="body">
+      <p class="step-hint">What are you leaving behind? Pick a category to get started.</p>
+      <div class="chips">
+        <span class="chip chip-selectable" data-cat="Tent" data-emoji="⛺" onclick="pickCategory(this)">⛺ Tent</span>
+        <span class="chip chip-selectable" data-cat="Sleeping bag" data-emoji="🛌" onclick="pickCategory(this)">🛌 Sleeping bag</span>
+        <span class="chip chip-selectable" data-cat="Camp stove" data-emoji="🔥" onclick="pickCategory(this)">🔥 Camp stove</span>
+        <span class="chip chip-selectable" data-cat="Beach chair" data-emoji="🪑" onclick="pickCategory(this)">🪑 Chair</span>
+        <span class="chip chip-selectable" data-cat="Trekking poles" data-emoji="🥾" onclick="pickCategory(this)">🥾 Poles</span>
+        <span class="chip chip-selectable" data-cat="Cooler" data-emoji="🧊" onclick="pickCategory(this)">🧊 Cooler</span>
+        <span class="chip chip-selectable" data-cat="Other gear" data-emoji="📦" onclick="pickCategory(this)">Other</span>
+      </div>
+    </div>
+    <div class="foot foot-solid"><button class="btn btn-primary" id="btn-cat-next" disabled onclick="go('s-list-details')">Continue</button></div>
+  </section>
+
+  <!-- FLOW 2: LIST — DETAILS (combined with category auto-detect) -->
+  <section class="screen" id="s-list-details">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-home')">‹</div>
+      <h1>List an item</h1>
+    </div>
+    <div class="body">
+      <div class="field">
+        <div class="field-label">Item name</div>
+        <input id="list-name" type="text" placeholder="What are you listing?" oninput="updateListing()">
+      </div>
+      <div class="field">
+        <div class="field-label">Short description</div>
+        <textarea id="list-desc" maxlength="140" placeholder="Why are you passing it on? Any quirks a borrower should know?" oninput="updateListing()"></textarea>
+        <div class="char-count"><span id="desc-count">0</span>/140</div>
+      </div>
+      <div class="field" id="detected-cat-field" style="display:none">
+        <div class="field-label">Detected category</div>
+        <div class="detected-row">
+          <span id="detected-chip" class="chip chip-selectable selected"></span>
+          <span class="change-link" onclick="toggleCategoryOverride()">Not right? Change</span>
+        </div>
+        <div id="cat-override" style="display:none;margin-top:12px">
+          <div class="chips">
+            <span class="chip chip-selectable" data-cat="Tent" data-emoji="&#x26FA;" onclick="overrideCategory(this)">&#x26FA; Tent</span>
+            <span class="chip chip-selectable" data-cat="Sleeping bag" data-emoji="&#x1F6CC;" onclick="overrideCategory(this)">&#x1F6CC; Sleeping bag</span>
+            <span class="chip chip-selectable" data-cat="Camp stove" data-emoji="&#x1F525;" onclick="overrideCategory(this)">&#x1F525; Camp stove</span>
+            <span class="chip chip-selectable" data-cat="Beach chair" data-emoji="&#x1FA91;" onclick="overrideCategory(this)">&#x1FA91; Chair</span>
+            <span class="chip chip-selectable" data-cat="Trekking poles" data-emoji="&#x1F45E;" onclick="overrideCategory(this)">&#x1F45E; Poles</span>
+            <span class="chip chip-selectable" data-cat="Cooler" data-emoji="&#x1F9CA;" onclick="overrideCategory(this)">&#x1F9CA; Cooler</span>
+            <span class="chip chip-selectable" data-cat="Other gear" data-emoji="&#x1F4E6;" onclick="overrideCategory(this)">Other</span>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Condition</div>
+        <div class="chips" id="condition-chips">
+          <span class="chip chip-selectable" data-val="Great" onclick="pickCondition(this)">Great</span>
+          <span class="chip chip-selectable" data-val="Good" onclick="pickCondition(this)">Good</span>
+          <span class="chip chip-selectable" data-val="Worn but works" onclick="pickCondition(this)">Worn but works</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot foot-solid"><button class="btn btn-primary" id="btn-details-next" disabled onclick="go('s-list-photo')">Continue</button></div>
+  </section>
+
+  <!-- FLOW 2: LIST — PHOTO -->
+  <section class="screen" id="s-list-photo">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-list-details')">‹</div>
+      <h1>Add a photo</h1>
+    </div>
+    <div class="body">
+      <p class="step-hint">One clear photo helps the next traveler trust what they are picking up.</p>
+      <div class="photo-zone" id="photo-zone">
+        <div class="ph-ic">📷</div>
+        <p>Take a photo or choose from your library</p>
+        <div class="photo-actions">
+          <span class="chip" onclick="addPhoto()">Camera</span>
+          <span class="chip" onclick="addPhoto()">Photo library</span>
+        </div>
+      </div>
+      <div class="photo-note" id="photo-trust-note">📌 Listings with photos get requested 3× more often. Borrowers want to see what they are getting.</div>
+    </div>
+    <div class="foot foot-solid">
+      <button class="btn btn-primary" id="btn-photo-next" disabled onclick="go('s-list-logistics')">Continue</button>
+      <button class="btn btn-ghost" onclick="skipPhoto()">Skip for now</button>
+    </div>
+  </section>
+
+  <!-- FLOW 2: LIST — LOGISTICS -->
+  <section class="screen" id="s-list-logistics">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-list-photo')">‹</div>
+      <h1>Pickup logistics</h1>
+    </div>
+    <div class="body">
+      <div class="field">
+        <div class="field-label">When can you meet?</div>
+        <div id="time-ranges"></div>
+        <button type="button" class="btn-add-range" onclick="toggleTimePicker()">+ Add a time range</button>
+        <div id="time-picker-form" class="time-picker-form" style="display:none">
+          <div class="field-label" style="margin-bottom:8px">Day</div>
+          <div class="tp-row">
+            <select id="tp-day" class="tp-select">
+              <option value="">Choose a day</option>
+              <option>Today</option><option>Tomorrow</option>
+              <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+              <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+            </select>
+          </div>
+          <div class="field-label" style="margin-bottom:8px">Time range</div>
+          <div class="tp-row">
+            <select id="tp-from" class="tp-select">
+              <option value="">From</option>
+              <option>7:00 AM</option><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option>
+              <option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option>
+              <option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option>
+              <option>7:00 PM</option><option>8:00 PM</option><option>9:00 PM</option>
+            </select>
+            <span style="color:var(--muted);flex:0 0 auto;font-weight:600">–</span>
+            <select id="tp-to" class="tp-select">
+              <option value="">To</option>
+              <option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+              <option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option>
+              <option>4:00 PM</option><option>5:00 PM</option><option>6:00 PM</option><option>7:00 PM</option>
+              <option>8:00 PM</option><option>9:00 PM</option><option>10:00 PM</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-primary" style="margin-top:2px" onclick="confirmTimeRange()">Add</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Preferred meetup area</div>
+        <input id="list-meetup" type="text" placeholder="Neighborhood, landmark, or transit hub" oninput="updateListing()">
+      </div>
+    </div>
+    <div class="foot foot-solid"><button class="btn btn-primary" id="btn-logistics-next" disabled onclick="renderPreview();go('s-list-preview')">Preview listing</button></div>
+  </section>
+
+  <!-- FLOW 2: LIST — PREVIEW -->
+  <section class="screen" id="s-list-preview">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="appbar">
+      <div class="back" onclick="go('s-list-logistics')">‹</div>
+      <h1>Preview listing</h1>
+    </div>
+    <div class="body">
+      <div class="preview-label">How travelers will see it</div>
+      <div class="item preview-card" style="cursor:default">
+        <div class="thumb t-tent" id="preview-thumb">⛺</div>
+        <div class="meta">
+          <h3 id="preview-name">Item name</h3>
+          <div class="row"><span class="dist" id="preview-meetup">Near you</span> · <span>You</span> <span class="badge free">Free</span> <span class="badge">↻ circulated 0×</span></div>
+        </div>
+      </div>
+      <div class="exchange-reminder"><span>🛈</span><div><b>No money, ever.</b> TSE is exchange only. If anyone asks to be paid, cancel and report it.</div></div>
+    </div>
+    <div class="foot foot-solid"><button class="btn btn-primary" onclick="go('s-list-done')">List it</button></div>
+  </section>
+
+  <!-- FLOW 2: LIST — SUCCESS -->
+  <section class="screen" id="s-list-done">
+    <div class="statusbar"><span>9:41</span><span>5G</span></div>
+    <div class="done">
+      <div class="ring">✓</div>
+      <h2 id="list-done-title">Your item is live</h2>
+      <p>Travelers near you can see it now. You will get a notification when someone requests it.</p>
+      <p style="color:#1f7a52;font-weight:600;margin-top:10px">Once someone borrows it and passes it on, it earns its first ↻ circulation.</p>
+    </div>
+    <div class="foot foot-solid">
       <button class="btn btn-primary" onclick="go('s-home')">Done</button>
     </div>
   </section>
@@ -260,23 +514,222 @@
 
 <!-- ===================== SIDE CAPTION (talk track) ===================== -->
 <div class="caption">
-  <h4>The hero flow</h4>
-  <ol>
-    <li><b>Need it tonight.</b> One clear job: find gear you didn't pack.</li>
-    <li><b>Matched nearby.</b> Distance + re-circulation count do the trust work.</li>
-    <li><b>Trust signals.</b> "Not for sale" banner, verified owner, circulation history.</li>
-    <li><b>Safe exchange.</b> Safety is a designed screen, not fine print.</li>
-    <li><b>Close the loop.</b> Returning the item is the rewarded behavior.</li>
-  </ol>
-  <div class="nb">This is the MVP cut: one flow that proves the riskiest assumption (find + safely get gear, fast). Offload, item-journey, and achievements are named aloud, not built. Inventory is seeded to dodge the cold-start problem for the demo.</div>
+  <div class="caption-tabs">
+    <button type="button" class="caption-tab active" data-cap="borrow" onclick="showCaption('borrow', this)">Flow 1 · Borrow</button>
+    <button type="button" class="caption-tab" data-cap="list" onclick="showCaption('list', this)">Flow 2 · List</button>
+  </div>
+  <div class="caption-panel active" id="cap-borrow">
+    <h4>Get it today</h4>
+    <ol>
+      <li><b>Need it today.</b> One clear job: find gear you didn't pack.</li>
+      <li><b>Matched nearby.</b> Distance + re-circulation count do the trust work.</li>
+      <li><b>Trust signals.</b> "Not for sale" banner, circulation count, distance, rating.</li>
+      <li><b>Safe exchange.</b> Safety is a designed screen, not fine print.</li>
+      <li><b>Close the loop.</b> Returning the item is the rewarded behavior.</li>
+    </ol>
+    <div class="nb">Flow 1 proves the riskiest assumption: find and safely get gear, fast. Inventory is seeded to dodge the cold-start problem for the demo.</div>
+  </div>
+  <div class="caption-panel" id="cap-list">
+    <h4>Pass it on</h4>
+    <ol>
+      <li><b>Leaving soon entry.</b> Home chip routes travelers who cannot take gear home.</li>
+      <li><b>Lightweight listing.</b> Category, condition, and a short description. No pricing.</li>
+      <li><b>Photo nudge.</b> Skip is allowed, but trust note explains why photos matter.</li>
+      <li><b>Pickup logistics.</b> Leaving date and a public meetup area, not a home address.</li>
+      <li><b>Preview parity.</b> Listing card matches Results so supply and demand look the same.</li>
+    </ol>
+    <div class="nb">Flow 2 closes the supply side of the circulation loop. It is designed, not backend-connected. Tap "List gear you can't take home" on Home to walk through it.</div>
+  </div>
 </div>
 
 <script>
+  var listing = { category:'', emoji:'⛺', name:'', condition:'', description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false };
+
   function go(id){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelector('#'+id+' .body, #'+id+' .done')?.scrollTo(0,0);
   }
+
+  function showCaption(which, tab){
+    document.querySelectorAll('.caption-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.caption-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('cap-'+which).classList.add('active');
+  }
+
+  function startList(){
+    listing = { category:'', emoji:'⛺', name:'', condition:'', description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false };
+    document.getElementById('list-name').value = '';
+    document.getElementById('list-desc').value = '';
+    document.getElementById('desc-count').textContent = '0';
+    document.getElementById('detected-cat-field').style.display = 'none';
+    document.getElementById('cat-override').style.display = 'none';
+    document.querySelectorAll('#condition-chips .chip-selectable').forEach(c=>c.classList.remove('selected'));
+    document.getElementById('btn-details-next').disabled = true;
+    resetPhotoZone();
+    document.getElementById('btn-photo-next').disabled = true;
+    document.getElementById('time-ranges').innerHTML = '';
+    document.getElementById('time-picker-form').style.display = 'none';
+    document.getElementById('list-meetup').value = '';
+    document.getElementById('btn-logistics-next').disabled = true;
+    showCaption('list', document.querySelector('[data-cap="list"]'));
+    go('s-list-details');
+  }
+
+  // category auto-detect (keyword match on item name)
+  function detectCategory(name){
+    var n = name.toLowerCase();
+    if(/tent|shelter/.test(n))           return { cat:'Tent',          emoji:'⛺' };
+    if(/sleep|bag/.test(n))              return { cat:'Sleeping bag',  emoji:'🛌' };
+    if(/stove|cook|burner/.test(n))      return { cat:'Camp stove',    emoji:'🔥' };
+    if(/chair|seat/.test(n))             return { cat:'Beach chair',   emoji:'🪑' };
+    if(/pole|trek|hiking|stick/.test(n)) return { cat:'Trekking poles',emoji:'🥾' };
+    if(/cool|ice/.test(n))               return { cat:'Cooler',        emoji:'🧊' };
+    return { cat:'Other gear', emoji:'📦' };
+  }
+
+  function toggleCategoryOverride(){
+    var ov = document.getElementById('cat-override');
+    ov.style.display = ov.style.display === 'none' ? '' : 'none';
+  }
+
+  function overrideCategory(el){
+    document.querySelectorAll('#cat-override .chip-selectable').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    listing.category = el.dataset.cat;
+    listing.emoji = el.dataset.emoji;
+    listing.categoryOverridden = true;
+    document.getElementById('detected-chip').textContent = el.dataset.emoji + ' ' + el.dataset.cat;
+    document.getElementById('cat-override').style.display = 'none';
+    validateDetails();
+  }
+
+  function pickCondition(el){
+    document.querySelectorAll('#condition-chips .chip-selectable').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    listing.condition = el.dataset.val;
+    validateDetails();
+  }
+
+  function updateListing(){
+    listing.name = document.getElementById('list-name').value.trim();
+    listing.description = document.getElementById('list-desc').value;
+    document.getElementById('desc-count').textContent = listing.description.length;
+    var meetupEl = document.getElementById('list-meetup');
+    if(meetupEl) listing.meetup = meetupEl.value.trim();
+
+    // auto-detect category unless user overrode it
+    if(listing.name.length > 0 && !listing.categoryOverridden){
+      var d = detectCategory(listing.name);
+      listing.category = d.cat;
+      listing.emoji = d.emoji;
+      document.getElementById('detected-chip').textContent = d.emoji + ' ' + d.cat;
+      document.getElementById('detected-cat-field').style.display = '';
+    } else if(listing.name.length === 0 && !listing.categoryOverridden){
+      listing.category = '';
+      document.getElementById('detected-cat-field').style.display = 'none';
+    }
+
+    validateDetails();
+    validateLogistics();
+  }
+
+  function validateDetails(){
+    var ok = listing.name.length > 0 && listing.condition.length > 0 && listing.category.length > 0;
+    document.getElementById('btn-details-next').disabled = !ok;
+  }
+
+  // time range functions
+  function toggleTimePicker(){
+    var f = document.getElementById('time-picker-form');
+    f.style.display = f.style.display === 'none' ? '' : 'none';
+  }
+
+  function confirmTimeRange(){
+    var day  = document.getElementById('tp-day').value;
+    var from = document.getElementById('tp-from').value;
+    var to   = document.getElementById('tp-to').value;
+    if(!day || !from || !to) return;
+    listing.timeRanges.push({ day:day, from:from, to:to });
+    renderTimeRanges();
+    document.getElementById('tp-day').value = '';
+    document.getElementById('tp-from').value = '';
+    document.getElementById('tp-to').value = '';
+    document.getElementById('time-picker-form').style.display = 'none';
+    validateLogistics();
+  }
+
+  function removeTimeRange(idx){
+    listing.timeRanges.splice(idx, 1);
+    renderTimeRanges();
+    validateLogistics();
+  }
+
+  function renderTimeRanges(){
+    document.getElementById('time-ranges').innerHTML = listing.timeRanges.map(function(tr, i){
+      return '<div class="time-range-card">'+
+        '<div class="trc-main"><div class="trc-day">'+tr.day+'</div>'+
+        '<div class="trc-time">'+tr.from+' – '+tr.to+'</div></div>'+
+        '<button type="button" class="trc-remove" onclick="removeTimeRange('+i+')">×</button>'+
+        '</div>';
+    }).join('');
+  }
+
+  function validateLogistics(){
+    var meetupEl = document.getElementById('list-meetup');
+    var meetup = meetupEl ? meetupEl.value.trim() : listing.meetup;
+    var ok = listing.timeRanges.length > 0 && meetup.length > 0;
+    var btn = document.getElementById('btn-logistics-next');
+    if(btn) btn.disabled = !ok;
+  }
+
+  function resetPhotoZone(){
+    listing.hasPhoto = false;
+    document.getElementById('photo-zone').className = 'photo-zone';
+    document.getElementById('photo-zone').innerHTML =
+      '<div class="ph-ic">📷</div><p>Take a photo or choose from your library</p>'+
+      '<div class="photo-actions"><span class="chip" onclick="addPhoto()">Camera</span>'+
+      '<span class="chip" onclick="addPhoto()">Photo library</span></div>';
+    document.getElementById('photo-trust-note').style.display = '';
+  }
+
+  function addPhoto(){
+    listing.hasPhoto = true;
+    var zone = document.getElementById('photo-zone');
+    zone.className = 'photo-zone has-photo';
+    zone.innerHTML = '<div class="photo-preview">'+listing.emoji+'</div>';
+    document.getElementById('photo-trust-note').style.display = 'none';
+    document.getElementById('btn-photo-next').disabled = false;
+  }
+
+  function skipPhoto(){
+    listing.hasPhoto = false;
+    go('s-list-logistics');
+  }
+
+  function renderPreview(){
+    document.getElementById('preview-thumb').textContent = listing.emoji;
+    document.getElementById('preview-name').textContent = listing.name;
+    document.getElementById('preview-meetup').textContent = listing.meetup || 'Near you';
+    document.getElementById('list-done-title').textContent = 'Your '+listing.name+' is live';
+  }
+
+  document.querySelectorAll('.thumb-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.thumb-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      var hero = document.getElementById('hero-photo');
+      var dots = document.querySelectorAll('.page-dots span');
+      var slide = Number(btn.dataset.slide);
+      dots.forEach(function(d,i){ d.className = i === slide ? 'active' : 'inactive'; });
+      if(btn.dataset.type === 'img'){
+        hero.innerHTML = '<img src="'+btn.dataset.src+'" alt="2-person backpacking tent">';
+      } else {
+        hero.innerHTML = '<span class="emoji">'+btn.dataset.emoji+'</span>';
+      }
+    });
+  });
 </script>
 </body>
 </html>
