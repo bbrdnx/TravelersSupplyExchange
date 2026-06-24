@@ -559,12 +559,13 @@
     document.querySelectorAll('.caption-panel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('cap-'+which).classList.add('active');
-    // also navigate the phone to the start of the selected flow
+    // navigate the phone to the start of the selected flow (no circular call)
     if(which === 'borrow') go('s-home');
-    if(which === 'list')   startList();
+    if(which === 'list')   resetListFlow();
   }
 
-  function startList(){
+  // resets state and navigates to the list flow entry — called by both startList() and showCaption()
+  function resetListFlow(){
     listing = { category:'', emoji:'⛺', name:'', condition:'', description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false };
     document.getElementById('list-name').value = '';
     document.getElementById('list-desc').value = '';
@@ -579,8 +580,17 @@
     document.getElementById('time-picker-form').style.display = 'none';
     document.getElementById('list-meetup').value = '';
     document.getElementById('btn-logistics-next').disabled = true;
-    showCaption('list', document.querySelector('[data-cap="list"]'));
     go('s-list-details');
+  }
+
+  // entry point from the home screen chip — also switches the caption tab
+  function startList(){
+    var tab = document.querySelector('[data-cap="list"]');
+    document.querySelectorAll('.caption-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.caption-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('cap-list').classList.add('active');
+    resetListFlow();
   }
 
   // category auto-detect (keyword match on item name)
