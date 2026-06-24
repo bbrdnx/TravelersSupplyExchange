@@ -190,18 +190,16 @@
       <p class="tag">Borrow what your trip needs. Pass on what it leaves behind.</p>
     </div>
     <div class="body">
-      <div class="search" onclick="go('s-results')">
+      <div class="search">
         <span class="ic">⌕</span>
-        <input placeholder="What do you need?" readonly>
+        <input id="borrow-search-input" placeholder="What do you need?" oninput="detectBorrowCategory()">
       </div>
-      <div class="qlabel">Popular right now</div>
-      <div class="chips">
-        <span class="chip" onclick="go('s-results')">⛺ Tent</span>
-        <span class="chip" onclick="go('s-results')">🛌 Sleeping bag</span>
-        <span class="chip" onclick="go('s-results')">🔥 Camp stove</span>
-        <span class="chip" onclick="go('s-results')">🪑 Beach chair</span>
-        <span class="chip" onclick="go('s-results')">🥾 Trekking poles</span>
-        <span class="chip" onclick="go('s-results')">🧊 Cooler</span>
+      <div id="borrow-detected-cat" style="display:none;margin-top:10px">
+        <div class="field-label">Detected category</div>
+        <div class="detected-row" style="margin-top:6px">
+          <span id="borrow-cat-chip" class="chip" onclick="go('s-results')"></span>
+          <span style="font-size:13px;color:var(--muted)">Tap to search</span>
+        </div>
       </div>
       <div class="qlabel">Leaving soon?</div>
       <div class="chips">
@@ -603,6 +601,15 @@
     if(/pole|trek|hiking|stick/.test(n)) return { cat:'Trekking poles',emoji:'🥾' };
     if(/cool|ice/.test(n))               return { cat:'Cooler',        emoji:'🧊' };
     return { cat:'Other gear', emoji:'📦' };
+  }
+
+  function detectBorrowCategory(){
+    var val = document.getElementById('borrow-search-input').value.trim();
+    var field = document.getElementById('borrow-detected-cat');
+    if(!val){ field.style.display='none'; return; }
+    var result = detectCategory(val);
+    document.getElementById('borrow-cat-chip').textContent = result.emoji + ' ' + result.cat;
+    field.style.display = '';
   }
 
   function toggleCategoryOverride(){
