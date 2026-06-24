@@ -156,6 +156,7 @@ Use the Figma MCP (`mcp__f238cea6...`) when doing design work.
 | Date | Change |
 |------|--------|
 | 2026-06-24 | Created CLAUDE.md from session history. Documented both flows, brand palette, stack rules, deploy flow, and conventions. |
+| 2026-06-24 | Prototype expansion: splash screen, home feed (12 Waikiki items), borrowed-item return card, bottom tab bar, messages list (5 DMs), DM conversation, own + other's profile, item origin on detail screen, return/pass-on bottom sheet. Total screens: 17. |
 | 2026-06-XX | Branding integration: CSS variables updated to official TSE palette; inline SVG logo added. |
 | 2026-06-XX | Listing flow added: 6 screens (s-list-category through s-list-done). |
 | 2026-06-XX | Category detection: both borrow and list flows now use keyword auto-detect instead of static chips. |

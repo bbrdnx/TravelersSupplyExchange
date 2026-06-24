@@ -41,7 +41,7 @@ Offload/listing flow, item world-journey map, achievements/gamification, real su
 
 ## Branding (logo)
 - **Latest logo assets** are the SVGs in `branding/`. See `branding/LATEST` for the canonical list.
-- **Stacked:** `branding/logo.svg` | **Horizontal:** `branding/logo-horizontal.svg` (used on the home screen in `index.html`).
+- **Stacked:** `branding/logo.svg` | **Horizontal:** `branding/logo-horizontal.svg` (used on the home screen in `index.html`) | **Mark only:** `branding/logo-mark.svg`.
 - Wordmark is **TRAVELER** / — SUPPLY — / EXCHANGE (singular "Traveler", not "Travelers").
 - Logo colors: navy `#012F61`, blue `#398CD8`, green `#317E4A`. PNGs in `branding/` are legacy reference only.
 
