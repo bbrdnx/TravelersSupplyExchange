@@ -68,7 +68,7 @@ CTA: "Done" → back to Home
 
 ## Flow 2 — Create & list an item
 
-This flow is **not yet built** in the prototype. Design it based on the product concept: travelers who can't take gear home list it for the next traveler. The entry point exists on the Home screen ("List gear you can't take home" chip). Fill in reasonable steps that match the product's tone (free exchange, safety-first, trust signals).
+This flow is **now implemented** in the prototype (screens `s-list-category` through `s-list-done`). Map it as it exists, reading `index.html` for the exact screens; the outline below matches the build. Entry is the "List gear you can't take home" card on Home.
 
 ```
 [Home] — entry via "List gear you can't take home" chip
@@ -110,7 +110,7 @@ CTA: "Done" → Home
 
 ## Flow 3 — Relist a borrowed item
 
-This flow is **not yet built** in the prototype. It is the "close the loop" behavior: when a borrower is done with an item, they return it to the exchange rather than keeping or discarding it. It is teased on the Flow 1 success screen ("Keep It Moving" badge). The entry point could be a notification, an "Active borrows" section, or a deep link.
+This flow is **now implemented** in the prototype as a prefilled relist. It is the "close the loop" behavior: when a borrower is done with an item, they pass it on to the next traveler rather than keeping or discarding it. Entry is the "Borrowed Here" card on Home → "Pass it on" sheet → a prefilled relist that reuses the listing screens → a Trail Keeper achievement modal. Map it as it exists in `index.html`.
 
 ```
 [Entry — multiple paths]
@@ -157,7 +157,7 @@ CTA: "Done" → Home
 - **Entry point:** filled circle
 - **Terminal / Home return:** double-bordered rounded rectangle
 - **Trust / safety callout:** sticky note in gold (#F7B32B) pinned next to any screen that has a safety or trust signal
-- **Not yet built:** mark Flow 2 and Flow 3 screens with a dashed border and a light grey fill to distinguish them from the implemented Flow 1
+- All three flows are implemented; render them with the same solid style (no dashed "not built" treatment)
 - Use TSE's brand color `#127475` (teal) for flow swimlane headers
 
 ## Notes

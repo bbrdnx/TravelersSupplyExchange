@@ -17,16 +17,15 @@ A concept app: a trusted way for travelers to **borrow the gear a trip needs and
 - Keep it a single file unless I explicitly ask to split it. Do not introduce a framework, bundler, package.json, or npm dependencies without asking first.
 - Mobile-first. The current design targets a ~390px phone frame.
 
-## The MVP (what exists)
-Five screens making up the "I need it tonight" hero flow:
-1. Home / search a need
-2. Results — matched items nearby (distance + re-circulation count)
-3. Item detail — trust signals + a clear "not for sale" notice
-4. Safe-exchange ground rules
-5. Confirmation that rewards returning the item
+## What exists
+Three connected flows plus supporting screens (see `CLAUDE.md` for the full screen list):
+- **Borrow (hero flow):** Home / search → Results → Item detail (data-driven, trust signals, "not for sale") → Safe-exchange ground rules → Confirmation that rewards returning the item.
+- **List:** "List gear you can't take home" → auto-detected category, condition, photo, pickup windows → preview → live.
+- **Pass it on:** borrowed-item return prompt → prefilled relist (reuses the listing screens) → Trail Keeper achievement modal that animates in, then resets.
+- Plus splash, home feed (12 seeded items), messages (most-recent conversation active), and profile screens.
 
 ## Intentionally NOT built (don't add unless asked)
-Offload/listing flow, item world-journey map, achievements/gamification, real supply matching, any backend. Inventory is **seeded/hardcoded** on purpose to sidestep the cold-start problem for the demo.
+Item world-journey map, real supply matching, any backend, and gamification beyond the existing badge. Inventory is **seeded/hardcoded** on purpose to sidestep the cold-start problem for the demo.
 
 ## Deploy flow (local → GitHub → Vercel)
 - Repo: `github.com/bbrdnx/TravelersSupplyExchange`. Vercel project `travelers-supply-exchange` is connected to it and **auto-deploys on push to `main`**. Live at https://travelers-supply-exchange.vercel.app

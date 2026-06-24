@@ -10,7 +10,7 @@ Cursor automatically loads the project context from `.cursor/rules/project.mdc`,
 >
 > For this session I want to work on the "I need it tonight" hero flow only. Make changes directly in `index.html`, in small reviewable steps, and tell me what you're about to change before you change it. Don't add new screens, frameworks, or dependencies unless I ask. No em-dashes in any copy.
 >
-> Start by reading `index.html` and giving me a quick map of the five screens and how `go(id)` switches between them. Then wait for my next instruction.
+> Start by reading `index.html` and giving me a quick map of the screens and how `go(id)` switches between them. Then wait for my next instruction.
 
 ---
 

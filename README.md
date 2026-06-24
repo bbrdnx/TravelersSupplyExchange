@@ -13,7 +13,7 @@ Usable travel gear gets stranded near other travelers who need it, with no trust
 ## Project structure
 ```
 TravelersSupplyExchange/
-├── index.html          # Clickable 5-screen MVP of the "I need it tonight" hero flow (served at /)
+├── index.html          # Clickable prototype: borrow, list, and pass-on flows (served at /)
 ├── prep/               # Interview-prep docs (excluded from the deployed site via .vercelignore)
 │   ├── idea-one-pager.html
 │   └── live-build-prompt-sequence.md
@@ -35,10 +35,12 @@ git push
 Vercel builds and publishes within a minute or so. The `prep/` folder is kept in the
 repo but excluded from the live site by `.vercelignore`.
 
-## The MVP hero flow
-Search a need → matched items nearby (distance + re-circulation count) → item detail with trust signals and a "not for sale" stance → safe-exchange ground rules → confirmation that rewards returning the item.
+## The flows
+- **Borrow (hero flow):** search a need → matched items nearby (distance + re-circulation count) → item detail with trust signals and a "not for sale" stance → safe-exchange ground rules → confirmation that rewards returning the item.
+- **List:** leave gear behind via "List gear you can't take home" → auto-detected category, condition, photo, pickup windows → preview → live.
+- **Pass it on:** the borrowed item prompts a return → a prefilled relist reuses the listing flow → completing it unlocks the Trail Keeper achievement, the behavior that closes the loop.
 
-Open `prototype/index.html` in a browser to click through it.
+Listings are data-driven (every seeded item opens its own detail), with supporting messages and profile screens. Open `index.html` in a browser to click through it.
 
 ## What's intentionally *not* built
-Offload/listing flow, item world-journey, achievements, and real supply matching. Named aloud as the vision, cut from the MVP so one flow ships honest and complete. Inventory is seeded to sidestep the cold-start problem for the demo.
+Item world-journey map, real supply matching, and any backend. Named aloud as the vision, cut so the built flows ship honest and complete. Inventory is seeded to sidestep the cold-start problem for the demo.
