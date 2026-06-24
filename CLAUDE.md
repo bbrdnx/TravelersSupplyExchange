@@ -74,7 +74,7 @@ Defined as CSS variables in `:root` inside `index.html`. Do not use hardcoded he
 | `--forest` | `#2F6B04` | "Free" badges, circulation chips / logo bottom quadrant |
 | `--sage` | `#6D885A` | Muted / secondary text / logo left quadrant |
 | `--teal` | `#75C7C0` | Accent highlights |
-| `--bg` | `#F0EDE6` | Page background / cream |
+| `--bg` | `#FAF8F3` | Page / screen background, warm off-white |
 | `--card` | `#ffffff` | Card surfaces |
 | `--warn` | `#E2403E` | Error / warning |
 | `--gold` | `#F2B733` | Gold / badge highlights |
@@ -155,6 +155,7 @@ Use the Figma MCP (`mcp__f238cea6...`) when doing design work.
 
 | Date | Change |
 |------|--------|
+| 2026-06-24 | Detail screen: owner stats (exchanges, rating, items listed) moved inside the owner card under an "Owner's track record" label and rendered with the same `.chip-meta` green badges as the item stats, so they clearly read as the owner's, not the item's. Removed the old 3-column `.trust` block. Then lightened `--bg` from `#F0EDE6` to `#FAF8F3` (warmer, near-white) for all screens. |
 | 2026-06-24 | Side caption rewritten into three tabbed flows (1 Borrow / 2 List / 3 Pass it on). Every step now has a green value point (`.cap-value`) explaining why it matters, plus a clickable `step-link` that jumps to the live screen (search link auto-runs a tent search; relist link calls `startRelist()`; achievement link previews the badge). `showCaption()` handles the new `relist` tab. Verified with jsdom (10 checks, 0 errors). |
 | 2026-06-24 | Navigable prototype pass. (1) Item listings now data-driven: `ITEMS` array of all 12 home items drives the home feed, search results, and a per-item detail screen (`openDetail(id, from)` fills photo gallery, name, description, owner, origin, trust; back target is dynamic). Search (`runSearch()`) filters by detected category. (2) Relist flow: "Pass it on" on the borrowed card calls `startRelist()`, which prefills name/description/condition/category/photo from the borrowed tent and shows a relist banner, then reuses the listing screens. (3) Achievement modal: completing a pass-on calls `finishListing()` → `openAchievement()`, a centered Trail Keeper badge card that animates in over a dimmed background with confetti, then auto-resets to home after ~4.5s (or on tap). New listings still end on `s-list-done`. (4) Messages: all DMs except the most recent (Maya R.) are shown but disabled (`.dm-disabled` + lock glyph). Verified with a jsdom harness (30 checks, 0 errors). |
 | 2026-06-24 | Created CLAUDE.md from session history. Documented both flows, brand palette, stack rules, deploy flow, and conventions. |
