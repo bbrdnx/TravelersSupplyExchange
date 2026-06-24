@@ -472,6 +472,38 @@
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
   }
+
+  /* ===== Immersive mobile (real-phone feel) ===== */
+  /* Floating guide trigger + overlay backdrop + in-overlay close, hidden on desktop */
+  .guide-fab{display:none}
+  .guide-backdrop{display:none}
+  .guide-close{display:none}
+
+  @media (max-width:600px){
+    /* App fills the whole screen, no gray page, no bezel, no notch */
+    body{padding:0;gap:0;margin:0;background:var(--bg);display:block;min-height:100dvh}
+    .phone{width:100vw;height:100dvh;border-radius:0;box-shadow:none}
+    .notch{display:none}
+
+    /* Floating "Guide" button, sits above the tab bar */
+    .guide-fab{display:inline-flex;align-items:center;gap:6px;position:fixed;right:14px;bottom:78px;z-index:100;
+      height:40px;padding:0 16px;background:var(--navy);color:#fff;border:none;border-radius:999px;
+      font-size:13px;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.28);cursor:pointer}
+    .guide-fab:active{transform:scale(.96)}
+
+    /* Caption becomes a bottom-sheet overlay */
+    .guide-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.42);
+      opacity:0;visibility:hidden;transition:opacity .3s ease;z-index:110}
+    .guide-backdrop.open{opacity:1;visibility:visible}
+    .caption{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;max-width:none;margin:0;
+      max-height:86dvh;overflow-y:auto;border-radius:22px 22px 0 0;
+      transform:translateY(100%);transition:transform .32s ease;z-index:120;
+      box-shadow:0 -10px 44px rgba(0,0,0,.28)}
+    .caption.open{transform:translateY(0)}
+    .guide-close{display:flex;align-items:center;justify-content:center;position:absolute;top:14px;right:16px;
+      width:30px;height:30px;border:none;border-radius:50%;background:var(--chip);color:var(--ink);
+      font-size:18px;line-height:1;cursor:pointer}
+  }
 </style>
 </head>
 <body>
@@ -1158,7 +1190,10 @@
 </div><!-- end .phone -->
 
 <!-- ===== SIDE CAPTION ===== -->
+<button type="button" class="guide-fab" onclick="openGuide()">ⓘ Guide</button>
+<div class="guide-backdrop" onclick="closeGuide()"></div>
 <div class="caption">
+  <button type="button" class="guide-close" onclick="closeGuide()" aria-label="Close guide">×</button>
   <div class="caption-tabs">
     <button type="button" class="caption-tab active" data-cap="borrow" onclick="showCaption('borrow',this)">1 · Borrow</button>
     <button type="button" class="caption-tab" data-cap="list" onclick="showCaption('list',this)">2 · List</button>
@@ -1533,6 +1568,7 @@
 
   // ── Navigation ─────────────────────────────────────────────────
   function go(id){
+    closeGuide();   // dismiss the mobile guide overlay when navigating
     document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
     var scrollEl = document.querySelector(
@@ -1549,6 +1585,18 @@
     if(which === 'borrow') go('s-home');
     if(which === 'list'){ resetListFlow(); go('s-list-details'); }
     if(which === 'relist') go('s-home');
+  }
+
+  // ── Mobile guide overlay ───────────────────────────────────────
+  function openGuide(){
+    document.querySelector('.caption').classList.add('open');
+    document.querySelector('.guide-backdrop').classList.add('open');
+  }
+  function closeGuide(){
+    var cap = document.querySelector('.caption');
+    if(cap) cap.classList.remove('open');
+    var bd = document.querySelector('.guide-backdrop');
+    if(bd) bd.classList.remove('open');
   }
 
   // ── Bottom sheets ──────────────────────────────────────────────
