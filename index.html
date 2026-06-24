@@ -559,6 +559,9 @@
     document.querySelectorAll('.caption-panel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('cap-'+which).classList.add('active');
+    // also navigate the phone to the start of the selected flow
+    if(which === 'borrow') go('s-home');
+    if(which === 'list')   startList();
   }
 
   function startList(){
