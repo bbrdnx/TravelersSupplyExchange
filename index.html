@@ -322,6 +322,12 @@
   .sheet h3{font-size:18px;font-weight:800;margin:0 0 3px}
   .sheet-check{width:60px;height:60px;border-radius:50%;background:#e4f0dc;color:var(--forest);
     display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;margin:4px auto 14px}
+  .stars{display:flex;gap:10px;font-size:32px;color:#dcdcdc;margin-bottom:18px}
+  .stars .star{cursor:pointer;line-height:1;transition:transform .12s ease, color .15s ease}
+  .stars .star.on{color:var(--gold)}
+  .stars .star:hover{transform:scale(1.14)}
+  .stars .star:active{transform:scale(.9)}
+  .pi-empty{font-size:13px;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center}
   .sheet .sh-sub{font-size:13px;color:var(--muted);margin:0 0 14px}
   .multi-opt{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
   .multi-opt:last-of-type{border-bottom:0;margin-bottom:14px}
@@ -507,6 +513,29 @@
         </div>
       </div>
 
+      <!-- Borrowed here (appears after you borrow) -->
+      <div id="home-borrowed" style="display:none">
+        <div class="section-label">Borrowed Here</div>
+        <div class="borrowed-card">
+          <div class="bc-row" onclick="openDetail(borrowedItem.id,'s-home')" style="cursor:pointer">
+            <div class="bc-thumb"><img id="hb-thumb" src="" alt=""></div>
+            <div>
+              <p class="bc-name" id="hb-name"></p>
+              <div class="bc-sub" id="hb-sub"></div>
+              <div class="bc-sub" id="hb-circ" style="color:var(--forest);font-weight:600;margin-top:3px"></div>
+            </div>
+          </div>
+          <div class="ls-achievement" style="margin:11px 0 11px">
+            <span class="ls-medal">🏅</span>
+            <span class="ls-ach-text" id="hb-teaser"></span>
+          </div>
+          <div class="bc-cta">
+            <button class="btn-pass" onclick="openPassSheet(borrowedItem.id)">Pass it on</button>
+            <button class="btn-keep" onclick="openKeepSheet(borrowedItem.id)">Not passing on</button>
+          </div>
+        </div>
+      </div>
+
       <div class="qlabel">Leaving Soon?</div>
       <div class="ls-card">
         <div class="ls-header">
@@ -647,7 +676,7 @@
       <p style="color:var(--forest);font-weight:600;margin-top:10px" id="done-circ">When you return this item to the exchange, it keeps circulating and you earn the <b>Keep It Moving</b> badge.</p>
     </div>
     <div class="foot foot-solid">
-      <button class="btn btn-primary" onclick="go('s-home')">Done</button>
+      <button class="btn btn-primary" onclick="openReceiveSheet()">Continue</button>
     </div>
   </section>
 
@@ -770,22 +799,23 @@
     <div class="profile-body">
       <div class="profile-section">
         <div class="profile-section-label">Currently Borrowing</div>
-        <div class="borrowed-card" style="box-shadow:none">
-          <div class="bc-row" onclick="openDetail('tent2','s-profile-own')" style="cursor:pointer">
-            <div class="bc-thumb"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
+        <div id="profile-borrow-empty" class="pi-empty">Nothing borrowed yet. Find gear on the Explore tab to start.</div>
+        <div id="profile-borrowed" class="borrowed-card" style="box-shadow:none;display:none">
+          <div class="bc-row" onclick="openDetail(borrowedItem.id,'s-profile-own')" style="cursor:pointer">
+            <div class="bc-thumb"><img id="pb-thumb" src="" alt=""></div>
             <div>
-              <p class="bc-name">2-person backpacking tent</p>
-              <div class="bc-sub">From Maya R. · Borrowed Jun 22</div>
-              <div class="bc-sub" style="color:var(--forest);font-weight:600;margin-top:3px">↻ Passed along 4× so far</div>
+              <p class="bc-name" id="pb-name"></p>
+              <div class="bc-sub" id="pb-sub"></div>
+              <div class="bc-sub" id="pb-circ" style="color:var(--forest);font-weight:600;margin-top:3px"></div>
             </div>
           </div>
           <div class="ls-achievement" style="margin:11px 0 11px">
             <span class="ls-medal">🏅</span>
-            <span class="ls-ach-text">This tent has been <strong>passed along 4×</strong> already. Pass it on again to make it <strong>5×</strong> and earn the <strong>Trail Keeper</strong> badge.</span>
+            <span class="ls-ach-text" id="pb-teaser"></span>
           </div>
           <div class="bc-cta">
-            <button class="btn-pass" onclick="openPassSheet()">Pass it on</button>
-            <button class="btn-keep" onclick="openKeepSheet()">Not passing on</button>
+            <button class="btn-pass" onclick="openPassSheet(borrowedItem.id)">Pass it on</button>
+            <button class="btn-keep" onclick="openKeepSheet(borrowedItem.id)">Not passing on</button>
           </div>
         </div>
       </div>
@@ -1014,12 +1044,34 @@
     <div class="foot foot-solid"><button class="btn btn-primary" onclick="go('s-home')">Done</button></div>
   </section>
 
+  <!-- ── RECEIVE + REVIEW SHEET ─────────────── -->
+  <div class="sheet-overlay" id="receive-sheet" onclick="closeSheetOutside(event,'receive-sheet')">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <h3>Did you get the item?</h3>
+      <p class="sh-sub">Once you've met up and picked it up, confirm and review the exchange.</p>
+      <div class="item-ref" style="margin:14px 0 4px">
+        <div class="ir-thumb"><img id="rcv-thumb" src="" alt=""></div>
+        <div><b id="rcv-name">Item</b><span id="rcv-owner">From owner</span></div>
+      </div>
+      <div class="field-label" style="margin:18px 0 8px">Rate the exchange</div>
+      <div class="stars" id="rcv-stars">
+        <span class="star" onclick="setStars(1)">★</span>
+        <span class="star" onclick="setStars(2)">★</span>
+        <span class="star" onclick="setStars(3)">★</span>
+        <span class="star" onclick="setStars(4)">★</span>
+        <span class="star" onclick="setStars(5)">★</span>
+      </div>
+      <button class="btn btn-primary" id="rcv-confirm" disabled onclick="confirmReceived()">Confirm, I have it</button>
+    </div>
+  </div>
+
   <!-- ── PASS IT ON SHEET ───────────────────── -->
   <div class="sheet-overlay" id="pass-sheet" onclick="closeSheetOutside(event,'pass-sheet')">
     <div class="sheet">
       <div class="sheet-handle"></div>
       <h3>Pass it on</h3>
-      <p class="sh-sub">2-person backpacking tent · Borrowed Jun 22 from Maya R.</p>
+      <p class="sh-sub" id="pass-sub">2-person backpacking tent · From Maya R.</p>
       <p class="desc" style="margin:0 0 16px;color:var(--muted)">Keep it circulating. We'll prefill a new listing from the gear you borrowed, you just confirm a pickup time.</p>
       <button class="btn btn-primary" onclick="startRelist()">Pass it on to the next traveler</button>
       <button class="btn btn-ghost" onclick="closeSheet('pass-sheet')">Not now</button>
@@ -1031,7 +1083,7 @@
     <div class="sheet">
       <div class="sheet-handle"></div>
       <h3>Not passing it on?</h3>
-      <p class="sh-sub">2-person backpacking tent · let us know why</p>
+      <p class="sh-sub" id="keep-sub">2-person backpacking tent · let us know why</p>
       <div class="multi-opt" onclick="toggleCheck(this)"><div class="mc"></div><span>Keeping it</span></div>
       <div class="multi-opt" onclick="toggleCheck(this)"><div class="mc"></div><span>Item consumed</span></div>
       <div class="multi-opt" onclick="toggleCheck(this)"><div class="mc"></div><span>Item is no longer usable and beyond repair</span></div>
@@ -1048,7 +1100,7 @@
       <div class="sheet-check">✓</div>
       <h3>Thanks for letting us know</h3>
       <p class="sh-sub" style="margin-bottom:18px">Tracking where gear ends up helps us keep the exchange honest and useful for the next traveler.</p>
-      <button class="btn btn-primary" onclick="closeSheet('thanks-sheet')">Done</button>
+      <button class="btn btn-primary" onclick="location.reload()">Done</button>
     </div>
   </div>
 
@@ -1157,6 +1209,10 @@
     description:'', hasPhoto:false, timeRanges:[], meetup:'', categoryOverridden:false, isRelist:false, imageSrc:''
   };
   var achTimer = null;
+  var currentDetailId = null;   // item currently open in detail / being requested
+  var borrowedItem = null;      // item the viewer has borrowed this session
+  var passItemId = 'tent2';     // item being passed on / not passed (drives sheets, relist, achievement)
+  var reviewStars = 0;          // star rating chosen in the receive sheet
 
   // ── Seeded inventory ───────────────────────────────────────────
   var ITEMS = [
@@ -1259,7 +1315,37 @@
 
   function renderHome(){
     document.getElementById('home-feed').innerHTML =
-      ITEMS.map(function(it){ return cardHTML(it,'s-home'); }).join('');
+      ITEMS.filter(function(it){ return !borrowedItem || it.id !== borrowedItem.id; })
+           .map(function(it){ return cardHTML(it,'s-home'); }).join('');
+  }
+
+  // ── Borrowed-item sections (home + profile) ────────────────────
+  function renderBorrowed(){
+    var hb = document.getElementById('home-borrowed');
+    var pb = document.getElementById('profile-borrowed');
+    var pe = document.getElementById('profile-borrow-empty');
+    if(!borrowedItem){
+      hb.style.display = 'none';
+      pb.style.display = 'none';
+      pe.style.display = '';
+      return;
+    }
+    var it = borrowedItem;
+    var next = it.circ + 1;
+    var teaser = it.circ > 0
+      ? 'This gear has been <strong>passed along '+it.circ+'×</strong> already. Pass it on to make it <strong>'+next+'×</strong> and earn the <strong>Trail Keeper</strong> badge.'
+      : 'Be the first to pass this gear on, and earn the <strong>Trail Keeper</strong> badge.';
+    var circLine = it.circ > 0 ? '↻ Passed along '+it.circ+'× so far' : '↻ New to the exchange';
+    ['hb','pb'].forEach(function(p){
+      document.getElementById(p+'-thumb').src = it.images[0];
+      document.getElementById(p+'-name').textContent = it.name;
+      document.getElementById(p+'-sub').textContent = 'From '+it.owner.name+' · Borrowed today';
+      document.getElementById(p+'-circ').textContent = circLine;
+      document.getElementById(p+'-teaser').innerHTML = teaser;
+    });
+    hb.style.display = '';
+    pb.style.display = '';
+    pe.style.display = 'none';
   }
 
   function runSearch(){
@@ -1278,6 +1364,7 @@
   // ── Item detail (data-driven) ──────────────────────────────────
   function openDetail(id, from){
     var it = itemById(id); if(!it) return;
+    currentDetailId = id;
     document.getElementById('detail-back').setAttribute('onclick', "go('"+(from||'s-home')+"')");
     buildGallery(it);
     document.getElementById('detail-name').textContent = it.name;
@@ -1335,8 +1422,8 @@
   // ── Relist (prefilled pass-on) ─────────────────────────────────
   function startRelist(){
     closeSheet('pass-sheet');
-    var t = itemById('tent2');
-    listing = { category:'Tent', emoji:'⛺', name:t.name, condition:'Great',
+    var t = itemById(passItemId) || itemById('tent2');
+    listing = { category:t.cat, emoji:t.emoji, name:t.name, condition:t.condition,
       description:'Borrowed in Waikiki and passing it on. '+t.desc, hasPhoto:true,
       imageSrc:t.images[0], timeRanges:[], meetup:'', categoryOverridden:true, isRelist:true };
     document.getElementById('details-title').textContent = 'Pass it on';
@@ -1345,11 +1432,11 @@
     document.getElementById('list-name').value = listing.name;
     document.getElementById('list-desc').value = listing.description;
     document.getElementById('desc-count').textContent = listing.description.length;
-    document.getElementById('detected-chip').textContent = '⛺ Tent';
+    document.getElementById('detected-chip').textContent = t.emoji+' '+t.cat;
     document.getElementById('detected-cat-field').style.display = '';
     document.getElementById('cat-override').style.display = 'none';
     document.querySelectorAll('#condition-chips .chip-selectable').forEach(function(c){
-      c.classList.toggle('selected', c.dataset.val==='Great');
+      c.classList.toggle('selected', c.dataset.val===t.condition);
     });
     var z = document.getElementById('photo-zone');
     z.className = 'photo-zone has-photo';
@@ -1386,9 +1473,11 @@
   }
 
   function openAchievement(){
+    var it = itemById(passItemId) || itemById('tent2');
+    var next = it.circ + 1;
     document.getElementById('ach-title').textContent = 'Trail Keeper';
-    document.getElementById('ach-sub').textContent = 'You passed the tent on to its next traveler in Waikiki. The loop keeps going.';
-    document.getElementById('ach-circ').textContent = '↻ 5× circulated';
+    document.getElementById('ach-sub').textContent = 'You passed it on to its next traveler in Waikiki. The loop keeps going.';
+    document.getElementById('ach-circ').textContent = '↻ '+next+'× circulated';
     spawnSparks();
     document.getElementById('ach-modal').classList.add('open');
     achTimer = setTimeout(closeAchievement, 4500);
@@ -1397,8 +1486,7 @@
   function closeAchievement(){
     clearTimeout(achTimer);
     document.getElementById('ach-modal').classList.remove('open');
-    resetListFlow();
-    go('s-home');
+    location.reload();   // pass-on complete: restart the prototype
   }
 
   // ── Splash ─────────────────────────────────────────────────────
@@ -1430,8 +1518,18 @@
   function closeSheetOutside(e, id){
     if(e.target === document.getElementById(id)) closeSheet(id);
   }
-  function openPassSheet(){ openSheet('pass-sheet'); }
-  function openKeepSheet(){ openSheet('keep-sheet'); }
+  function openPassSheet(id){
+    passItemId = id || passItemId;
+    var it = itemById(passItemId) || itemById('tent2');
+    document.getElementById('pass-sub').textContent = it.name+' · From '+it.owner.name;
+    openSheet('pass-sheet');
+  }
+  function openKeepSheet(id){
+    passItemId = id || passItemId;
+    var it = itemById(passItemId) || itemById('tent2');
+    document.getElementById('keep-sub').textContent = it.name+' · let us know why';
+    openSheet('keep-sheet');
+  }
   function closeKeepSheet(){
     closeSheet('keep-sheet');
     document.querySelectorAll('#keep-sheet .mc').forEach(function(c){ c.classList.remove('on'); c.textContent=''; });
@@ -1439,6 +1537,30 @@
   function submitKeepReason(){
     closeKeepSheet();
     openSheet('thanks-sheet');
+  }
+
+  // ── Receive + review (closes the borrow request) ───────────────
+  function openReceiveSheet(){
+    var it = itemById(currentDetailId) || itemById('tent2');
+    document.getElementById('rcv-thumb').src = it.images[0];
+    document.getElementById('rcv-name').textContent = it.name;
+    document.getElementById('rcv-owner').textContent = 'From '+it.owner.name;
+    reviewStars = 0;
+    document.querySelectorAll('#rcv-stars .star').forEach(function(s){ s.classList.remove('on'); });
+    document.getElementById('rcv-confirm').disabled = true;
+    openSheet('receive-sheet');
+  }
+  function setStars(n){
+    reviewStars = n;
+    document.querySelectorAll('#rcv-stars .star').forEach(function(s,i){ s.classList.toggle('on', i < n); });
+    document.getElementById('rcv-confirm').disabled = false;
+  }
+  function confirmReceived(){
+    closeSheet('receive-sheet');
+    borrowedItem = itemById(currentDetailId) || itemById('tent2');
+    renderHome();
+    renderBorrowed();
+    go('s-home');
   }
   function toggleCheck(el){
     var mc = el.querySelector('.mc');
@@ -1630,6 +1752,7 @@
 
   // ── Init ───────────────────────────────────────────────────────
   renderHome();
+  renderBorrowed();
   (function(){
     var tentMatches = ITEMS.filter(function(x){ return x.cat==='Tent'; });
     document.getElementById('results-list').innerHTML =
