@@ -167,6 +167,7 @@
   .field textarea{resize:none;min-height:88px;line-height:1.45}
   .field input:focus,.field textarea:focus{border-color:var(--blue)}
   .char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:5px}
+  .suggest-label{font-size:11px;color:var(--sage);font-weight:600;margin:2px 0 8px}
   .photo-zone{border:2px dashed rgba(19,33,31,.18);border-radius:16px;padding:28px 16px;text-align:center;background:var(--card);margin:8px 0 14px}
   .photo-zone.has-photo{border-style:solid;border-color:var(--accent);padding:0;overflow:hidden}
   .photo-zone .ph-ic{font-size:40px;margin-bottom:8px}
@@ -976,6 +977,12 @@
       <div class="field">
         <div class="field-label">When can you meet?</div>
         <div id="time-ranges"></div>
+        <div class="suggest-label">Quick add</div>
+        <div class="chips" id="time-suggestions" style="margin-bottom:12px">
+          <span class="chip" onclick="addSuggestedTime('Today','4:00 PM','6:00 PM')">⏱ Today, 4–6 PM</span>
+          <span class="chip" onclick="addSuggestedTime('Tomorrow','9:00 AM','12:00 PM')">⏱ Tomorrow, 9 AM–12 PM</span>
+          <span class="chip" onclick="addSuggestedTime('Saturday','10:00 AM','1:00 PM')">⏱ Sat, 10 AM–1 PM</span>
+        </div>
         <button type="button" class="btn-add-range" onclick="toggleTimePicker()">+ Add a time range</button>
         <div id="time-picker-form" class="time-picker-form" style="display:none">
           <div class="field-label" style="margin-bottom:8px">Day</div>
@@ -1011,6 +1018,12 @@
       <div class="field">
         <div class="field-label">Preferred meetup area</div>
         <input id="list-meetup" type="text" placeholder="Neighborhood, landmark, or transit hub" oninput="updateListing()">
+        <div class="suggest-label" style="margin-top:10px">Popular safe spots nearby</div>
+        <div class="chips" id="meetup-suggestions">
+          <span class="chip chip-selectable" data-place="Outrigger Reef lobby" onclick="pickMeetup(this)">📍 Outrigger Reef lobby</span>
+          <span class="chip chip-selectable" data-place="Ala Moana Center" onclick="pickMeetup(this)">📍 Ala Moana Center</span>
+          <span class="chip chip-selectable" data-place="Waikiki Beach Walk" onclick="pickMeetup(this)">📍 Waikiki Beach Walk</span>
+        </div>
       </div>
     </div>
     <div class="foot foot-solid"><button class="btn btn-primary" id="btn-logistics-next" disabled onclick="renderPreview();go('s-list-preview')">Preview listing</button></div>
@@ -1043,6 +1056,23 @@
     </div>
     <div class="foot foot-solid"><button class="btn btn-primary" onclick="go('s-home')">Done</button></div>
   </section>
+
+  <!-- ── WELCOME / DEMO INTRO SHEET ─────────── -->
+  <div class="sheet-overlay" id="welcome-sheet" onclick="closeSheetOutside(event,'welcome-sheet')">
+    <div class="sheet" style="text-align:center">
+      <div class="sheet-handle"></div>
+      <svg width="46" height="46" viewBox="0 0 68 68" style="margin:2px auto 12px;display:block" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="34,2 66,34 34,34 2,34" fill="#3B52C4"/>
+        <polygon points="34,34 66,34 34,66" fill="#2F6B04"/>
+        <polygon points="2,34 34,34 34,66" fill="#6D885A"/>
+        <polygon points="34,2 34,34 2,34" fill="#163A5F"/>
+      </svg>
+      <h3>👋 Welcome, you're early</h3>
+      <p class="sh-sub" style="margin-bottom:10px">This is a clickable demo of an early MVP concept, so a few things are seeded just for the tour.</p>
+      <p class="desc" style="margin:0 0 18px;color:var(--ink)">Try <b>borrowing any item</b> to walk the whole loop: find gear nearby, arrange a safe handoff, then pass it on to the next traveler.</p>
+      <button class="btn btn-primary" onclick="closeSheet('welcome-sheet')">Let's go</button>
+    </div>
+  </div>
 
   <!-- ── RECEIVE + REVIEW SHEET ─────────────── -->
   <div class="sheet-overlay" id="receive-sheet" onclick="closeSheetOutside(event,'receive-sheet')">
@@ -1446,6 +1476,7 @@
     document.getElementById('time-ranges').innerHTML = '';
     document.getElementById('time-picker-form').style.display = 'none';
     document.getElementById('list-meetup').value = '';
+    syncMeetupChips();
     document.getElementById('btn-logistics-next').disabled = true;
     validateDetails();
     go('s-list-details');
@@ -1490,7 +1521,7 @@
   }
 
   // ── Splash ─────────────────────────────────────────────────────
-  setTimeout(function(){ go('s-home'); }, 2500);
+  setTimeout(function(){ go('s-home'); openSheet('welcome-sheet'); }, 2500);
 
   // ── Navigation ─────────────────────────────────────────────────
   function go(id){
@@ -1585,6 +1616,7 @@
     document.getElementById('time-ranges').innerHTML = '';
     document.getElementById('time-picker-form').style.display = 'none';
     document.getElementById('list-meetup').value = '';
+    syncMeetupChips();
     document.getElementById('btn-logistics-next').disabled = true;
   }
 
@@ -1655,6 +1687,7 @@
     document.getElementById('desc-count').textContent = listing.description.length;
     var meetupEl = document.getElementById('list-meetup');
     if(meetupEl) listing.meetup = meetupEl.value.trim();
+    syncMeetupChips();
     if(listing.name.length > 0 && !listing.categoryOverridden){
       var d = detectCategory(listing.name);
       listing.category = d.cat; listing.emoji = d.emoji;
@@ -1690,6 +1723,27 @@
     document.getElementById('tp-to').value = '';
     document.getElementById('time-picker-form').style.display = 'none';
     validateLogistics();
+  }
+
+  // ── Quick-add suggestions (tap instead of typing) ──────────────
+  function addSuggestedTime(day, from, to){
+    var dup = listing.timeRanges.some(function(t){ return t.day===day && t.from===from && t.to===to; });
+    if(!dup){ listing.timeRanges.push({day:day, from:from, to:to}); renderTimeRanges(); }
+    validateLogistics();
+  }
+  function pickMeetup(el){
+    var place = el.dataset.place;
+    document.getElementById('list-meetup').value = place;
+    listing.meetup = place;
+    syncMeetupChips();
+    validateLogistics();
+  }
+  function syncMeetupChips(){
+    var ms = document.getElementById('meetup-suggestions');
+    if(!ms) return;
+    ms.querySelectorAll('.chip-selectable').forEach(function(c){
+      c.classList.toggle('selected', c.dataset.place === (listing.meetup||''));
+    });
   }
 
   function removeTimeRange(idx){
