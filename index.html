@@ -47,10 +47,10 @@
   .brand .tag{color:var(--muted);font-size:13px;margin:4px 0 0}
 
   /* search */
-  .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);
+  .search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
     border-radius:14px;padding:13px 15px;margin:12px 0 6px;box-shadow:0 2px 8px rgba(19,33,31,.04)}
   .search input{border:0;outline:0;font-size:15px;flex:1;background:transparent;color:var(--ink)}
-  .search .ic{color:var(--muted)}
+  .search .ic{color:var(--muted);font-size:24px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 
   /* chips */
   .chips{display:flex;flex-wrap:wrap;gap:9px}
@@ -60,8 +60,8 @@
   .chip-selectable.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
 
   /* section label */
-  .section-label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:16px 0 10px;font-weight:700}
-  .qlabel{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:16px 2px 8px;font-weight:700}
+  .section-label{font-size:12px;color:var(--sage);margin:16px 0 10px;font-weight:500}
+  .qlabel{font-size:12px;color:var(--sage);margin:16px 2px 8px;font-weight:500}
 
   /* item cards */
   .item{display:flex;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;
@@ -208,8 +208,9 @@
   .tab-bar{flex:0 0 auto;display:flex;background:var(--card);border-top:1px solid var(--line)}
   .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;
     padding:8px 0 10px;font-size:10px;font-weight:600;color:var(--muted)}
-  .tab-item .ti{font-size:21px;line-height:1}
   .tab-item.active{color:var(--blue)}
+  .tab-ic-img{width:22px;height:22px;object-fit:contain;display:block;opacity:.4}
+  .tab-item.active .tab-ic-img{opacity:1;filter:invert(29%) sepia(82%) saturate(800%) hue-rotate(209deg) brightness(0.9)}
 
   /* === HOME FEED === */
   .home-scroll{flex:1 1 auto;overflow-y:auto;padding:4px 18px 8px}
@@ -275,13 +276,17 @@
   .profile-body{flex:1;overflow-y:auto}
   .profile-body::-webkit-scrollbar{display:none}
   .profile-section{padding:16px 18px 0}
-  .profile-section-label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:10px}
+  .profile-section-label{font-size:12px;color:var(--sage);font-weight:500;margin-bottom:10px}
   .pi-row{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
   .pi-row:last-child{border-bottom:0}
   .pi-thumb{width:44px;height:44px;border-radius:10px;flex:0 0 auto;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#dcdcdc}
   .pi-thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px}
   .pi-meta b{font-size:14px;display:block}
   .pi-meta span{font-size:12px;color:var(--muted)}
+
+  /* === PROFILE AVATAR BUTTON (home header) === */
+  .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue));
+    color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;cursor:pointer;flex:0 0 auto}
 
   /* === RETURN SHEET === */
   .sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:20;display:none;align-items:flex-end}
@@ -324,9 +329,8 @@
   <!-- ── HOME ──────────────────────────────── -->
   <section class="screen" id="s-home">
     <div class="statusbar"><span>9:41</span><span>5G</span></div>
-    <div class="brand">
-      <div class="logo"><img src="branding/logo-horizontal.svg" alt="Traveler Supply Exchange"></div>
-      <p class="tag">Borrow what your trip needs. Pass on what it leaves behind.</p>
+    <div class="brand" style="text-align:center">
+      <img src="branding/logo-mark-sm.svg" alt="Traveler Supply Exchange" style="height:52px;width:52px">
     </div>
     <div class="home-scroll">
       <div class="search">
@@ -342,9 +346,8 @@
       </div>
 
       <!-- Borrowed here -->
-      <div class="section-label">Borrowed here</div>
+      <div class="section-label">Borrowed Here</div>
       <div class="borrowed-card">
-        <div class="bc-label">You borrowed this · Return or pass on?</div>
         <div class="bc-row">
           <div class="bc-thumb"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
           <div>
@@ -358,8 +361,13 @@
         </div>
       </div>
 
+      <div class="qlabel">Leaving Soon?</div>
+      <div class="chips" style="padding-bottom:8px">
+        <span class="chip" onclick="startList()">＋ List gear you can't take home</span>
+      </div>
+
       <!-- Available nearby -->
-      <div class="section-label">Available near Waikiki</div>
+      <div class="section-label">Available Near Waikiki</div>
 
       <div class="item" onclick="go('s-detail')">
         <div class="thumb" style="padding:0"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
@@ -446,15 +454,24 @@
         </div>
       </div>
 
-      <div class="qlabel">Leaving soon?</div>
-      <div class="chips" style="padding-bottom:8px">
-        <span class="chip" onclick="startList()">＋ List gear you can't take home</span>
-      </div>
     </div>
     <div class="tab-bar">
-      <div class="tab-item active" onclick="go('s-home')"><span class="ti">🏠</span><span>Home</span></div>
-      <div class="tab-item" onclick="go('s-messages')"><span class="ti">💬</span><span>Messages</span></div>
-      <div class="tab-item" onclick="go('s-profile-own')"><span class="ti">👤</span><span>Profile</span></div>
+      <div class="tab-item active" onclick="go('s-home')">
+        <img class="tab-ic-img" src="images/icons/binoculars.fill.png" alt="">
+        <span>Explore</span>
+      </div>
+      <div class="tab-item" onclick="startList()">
+        <img class="tab-ic-img" src="images/icons/plus.png" alt="">
+        <span>Post</span>
+      </div>
+      <div class="tab-item" onclick="go('s-messages')">
+        <img class="tab-ic-img" src="images/icons/bubble.left.and.text.bubble.right.png" alt="">
+        <span>Messages</span>
+      </div>
+      <div class="tab-item" onclick="go('s-profile-own')">
+        <svg class="tab-ic-img" viewBox="0 0 24 24" fill="#000"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Profile</span>
+      </div>
     </div>
   </section>
 
@@ -643,9 +660,22 @@
       </div>
     </div>
     <div class="tab-bar">
-      <div class="tab-item" onclick="go('s-home')"><span class="ti">🏠</span><span>Home</span></div>
-      <div class="tab-item active" onclick="go('s-messages')"><span class="ti">💬</span><span>Messages</span></div>
-      <div class="tab-item" onclick="go('s-profile-own')"><span class="ti">👤</span><span>Profile</span></div>
+      <div class="tab-item" onclick="go('s-home')">
+        <img class="tab-ic-img" src="images/icons/binoculars.fill.png" alt="">
+        <span>Explore</span>
+      </div>
+      <div class="tab-item" onclick="startList()">
+        <img class="tab-ic-img" src="images/icons/plus.png" alt="">
+        <span>Post</span>
+      </div>
+      <div class="tab-item active" onclick="go('s-messages')">
+        <img class="tab-ic-img" src="images/icons/bubble.left.and.text.bubble.right.png" alt="">
+        <span>Messages</span>
+      </div>
+      <div class="tab-item" onclick="go('s-profile-own')">
+        <svg class="tab-ic-img" viewBox="0 0 24 24" fill="#000"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Profile</span>
+      </div>
     </div>
   </section>
 
@@ -682,7 +712,7 @@
   <!-- ── OWN PROFILE ────────────────────────── -->
   <section class="screen" id="s-profile-own">
     <div class="statusbar light" style="background:var(--navy)"><span>9:41</span><span>5G</span></div>
-    <div class="profile-hero" style="background:var(--navy)">
+    <div class="profile-hero" style="background:var(--navy);padding-top:36px">
       <div class="p-av" style="background:linear-gradient(135deg,var(--teal),var(--blue))">A</div>
       <div class="p-name">Alex B.</div>
       <div class="p-loc">📍 Waikiki, HI</div>
@@ -695,24 +725,37 @@
     </div>
     <div class="profile-body">
       <div class="profile-section">
-        <div class="profile-section-label">Currently borrowing</div>
+        <div class="profile-section-label">Currently Borrowing</div>
         <div class="pi-row" onclick="go('s-detail')">
           <div class="pi-thumb"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
           <div class="pi-meta"><b>2-person backpacking tent</b><span>From Maya R. · Borrowed Jun 22</span></div>
         </div>
       </div>
       <div class="profile-section" style="margin-top:16px;padding-bottom:16px">
-        <div class="profile-section-label">My listings</div>
+        <div class="profile-section-label">My Listings</div>
         <div class="pi-row">
-          <div class="pi-thumb"></div>
-          <div class="pi-meta"><b>Portable phone charger</b><span>Listed Jun 20 · Available</span></div>
+          <div class="pi-thumb" style="padding:0"><img src="images/boxfan.jpg" alt="box fan"></div>
+          <div class="pi-meta"><b>Box fan</b><span>Listed Jun 20 · Available</span></div>
         </div>
       </div>
     </div>
     <div class="tab-bar">
-      <div class="tab-item" onclick="go('s-home')"><span class="ti">🏠</span><span>Home</span></div>
-      <div class="tab-item" onclick="go('s-messages')"><span class="ti">💬</span><span>Messages</span></div>
-      <div class="tab-item active" onclick="go('s-profile-own')"><span class="ti">👤</span><span>Profile</span></div>
+      <div class="tab-item" onclick="go('s-home')">
+        <img class="tab-ic-img" src="images/icons/binoculars.fill.png" alt="">
+        <span>Explore</span>
+      </div>
+      <div class="tab-item" onclick="startList()">
+        <img class="tab-ic-img" src="images/icons/plus.png" alt="">
+        <span>Post</span>
+      </div>
+      <div class="tab-item" onclick="go('s-messages')">
+        <img class="tab-ic-img" src="images/icons/bubble.left.and.text.bubble.right.png" alt="">
+        <span>Messages</span>
+      </div>
+      <div class="tab-item active" onclick="go('s-profile-own')">
+        <svg class="tab-ic-img" viewBox="0 0 24 24" fill="#000"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z"/></svg>
+        <span>Profile</span>
+      </div>
     </div>
   </section>
 
@@ -735,17 +778,17 @@
     </div>
     <div class="profile-body">
       <div class="profile-section" style="padding-bottom:16px">
-        <div class="profile-section-label">Currently listing</div>
+        <div class="profile-section-label">Currently Listing</div>
         <div class="pi-row" onclick="go('s-detail')">
           <div class="pi-thumb"><img src="images/2 person tent image 1.jpeg" alt="tent"></div>
           <div class="pi-meta"><b>2-person backpacking tent</b><span>Free · ↻ 4× circulated</span></div>
         </div>
         <div class="pi-row">
-          <div class="pi-thumb"></div>
+          <div class="pi-thumb" style="padding:0"><img src="images/headlamp.jpg" alt="headlamp"></div>
           <div class="pi-meta"><b>Headlamp</b><span>Free · ↻ 2× circulated</span></div>
         </div>
         <div class="pi-row">
-          <div class="pi-thumb"></div>
+          <div class="pi-thumb" style="padding:0"><img src="images/rain jacket.jpg" alt="rain jacket"></div>
           <div class="pi-meta"><b>Rain jacket (M)</b><span>Free · ↻ 1× circulated</span></div>
         </div>
       </div>

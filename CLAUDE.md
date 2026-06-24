@@ -157,6 +157,8 @@ Use the Figma MCP (`mcp__f238cea6...`) when doing design work.
 |------|--------|
 | 2026-06-24 | Created CLAUDE.md from session history. Documented both flows, brand palette, stack rules, deploy flow, and conventions. |
 | 2026-06-24 | Prototype expansion: splash screen, home feed (12 Waikiki items), borrowed-item return card, bottom tab bar, messages list (5 DMs), DM conversation, own + other's profile, item origin on detail screen, return/pass-on bottom sheet. Total screens: 17. |
+| 2026-06-24 | Nav redesign: 4-tab bottom nav (Explore/Post/Messages/Profile). SF Pro PNG icons: binoculars=Explore, plus=Post, bubble=Messages, inline SVG person=Profile. Profile moved from header to nav. Logo-mark centered in home header, tagline removed. |
+| 2026-06-24 | Home feed polish: "Leaving Soon?" chip moved above item feed; "You borrowed this" label removed from borrowed card; section headers now title case, muted sage color (font-weight 500, no uppercase) — applied across home, profile, and all section labels app-wide. Search icon 24px; icon-to-input gap 8px. |
 | 2026-06-XX | Branding integration: CSS variables updated to official TSE palette; inline SVG logo added. |
 | 2026-06-XX | Listing flow added: 6 screens (s-list-category through s-list-done). |
 | 2026-06-XX | Category detection: both borrow and list flows now use keyword auto-detect instead of static chips. |

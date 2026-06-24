@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="110 24 593 593" fill="none" role="img" aria-label="Traveler Supply Exchange mark" data-tse-logo-version="2" data-tse-logo-layout="mark-sm" data-tse-logo-status="latest">
+  <!-- TSE logo v2 (latest) | compact mark, fill only, no inner icons | for small screens -->
+  <g id="icon-mark">
+    <rect x="315" y="67" width="190" height="190" rx="26" transform="rotate(45 410 162)" fill="#398CD8"/>
+    <rect x="155" y="227" width="190" height="190" rx="26" transform="rotate(45 250 322)" fill="#012F61"/>
+    <rect x="475" y="227" width="190" height="190" rx="26" transform="rotate(45 570 322)" fill="#012F61"/>
+    <rect x="315" y="387" width="190" height="190" rx="26" transform="rotate(45 410 482)" fill="#317E4A"/>
+  </g>
+</svg>
