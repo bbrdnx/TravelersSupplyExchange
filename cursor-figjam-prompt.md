@@ -10,7 +10,7 @@ Create a user flow diagram in FigJam for the **Traveler Supply Exchange (TSE)** 
 
 ## Step 1 — Orient yourself
 
-Read `index.html`. It is a single-file static prototype with inline CSS and JS. There is no framework, no build step. The entire UI lives in five `<section class="screen">` elements that show/hide via a `go(id)` function. Understand the screen IDs, their content, and the navigation connections before touching any other tool.
+Read `index.html`. It is a single-file static prototype with inline CSS and JS. There is no framework, no build step. The UI lives in sixteen `<section class="screen">` elements (borrow, list/pass-on, and supporting screens) that show/hide via a `go(id)` function, plus several bottom-sheet overlays (welcome, receive/review, pass, keep, thank-you) and an achievement modal. Understand the screen IDs, the overlays, their content, and the navigation connections before touching any other tool.
 
 ## Step 2 — Create the FigJam diagram
 
@@ -60,8 +60,17 @@ CTA: "Send request & suggest a meeting spot"
 [Success — Request Sent]
 "Request sent to Maya"
 "You'll get a notification when she confirms a public meeting spot near you."
-Forward hook: "When you return this tent to the exchange, it'll be circulated 5× — and you'll earn the Keep It Moving badge."
-CTA: "Done" → back to Home
+Forward hook points at returning the item to circulate it and earn the Keep It Moving badge.
+CTA: "Continue"
+  ↓
+
+[Receive + review sheet]
+"Did you get the item?" — item summary plus a tappable star rating
+Confirm is disabled until a rating is chosen
+  ↓ confirm
+
+[Home — Borrowed Here]
+The borrowed item now appears in a "Borrowed Here" section on Home (and in the profile's Currently Borrowing), with a Trail Keeper teaser → branches to Flow 3
 ```
 
 ---
@@ -88,8 +97,8 @@ Skip option (not recommended — trust signal note shown)
   ↓
 
 [Pickup logistics]
-"When are you leaving?" — date picker (today / tomorrow / pick date)
-"Preferred meetup area" — neighborhood or landmark text field
+"When can you meet?" availability windows (add a day + time range, or tap a quick-add suggestion chip)
+"Preferred meetup area" text field, with tap-to-fill location suggestion chips
   ↓
 
 [Preview your listing]
@@ -110,41 +119,32 @@ CTA: "Done" → Home
 
 ## Flow 3 — Relist a borrowed item
 
-This flow is **now implemented** in the prototype as a prefilled relist. It is the "close the loop" behavior: when a borrower is done with an item, they pass it on to the next traveler rather than keeping or discarding it. Entry is the "Borrowed Here" card on Home → "Pass it on" sheet → a prefilled relist that reuses the listing screens → a Trail Keeper achievement modal. Map it as it exists in `index.html`.
+This flow is **now implemented** in the prototype. It is the "close the loop" behavior: when a borrower is done with an item, they pass it on to the next traveler rather than keeping or discarding it. Entry is the "Borrowed Here" card (on Home after a borrow, and in the profile's Currently Borrowing). It branches into two paths, both of which restart the prototype at the end. Map it as it exists in `index.html` (the pass and keep sheets, then the relist screens or the thank-you sheet).
 
 ```
-[Entry — multiple paths]
-  A: Notification — "Your exchange with Maya ends soon. Returning the tent? Keep it moving."
-  B: Home → "My borrows" tab/section → active borrow card → "Return to exchange"
-  (Show both entry paths converging)
-  ↓
+[Entry — Borrowed Here card]
+Item thumb, original lender, borrowed date, circulation count, Trail Keeper teaser
+Two buttons: "Pass it on" (secondary) and "Not passing on" (tertiary)
+  ↓ branches
 
-[Active borrow detail]
-Item name, image, original lender (Maya R.), borrowed date, days held
-CTA: "Return to exchange"
+— Path A: Pass it on —
+[Pass-it-on sheet]
+Item summary + "Pass it on to the next traveler"
   ↓
+[Relist (prefilled)]
+Reuses the listing screens (details / photo / logistics / preview), every field prefilled from the borrowed item
+  ↓ "List it"
+[Trail Keeper achievement modal]
+Badge animates in with confetti; circulation shows N+1
+  ↓ (tap or auto) restarts the prototype
 
-[Condition check]
-"How is it holding up?"
-Options (single select):
-  ✅ Great — same as when I got it
-  👍 Good — minor wear, fully usable
-  ⚠️ Worn — works but showing use (add note)
-  ❌ Damaged — doesn't work properly (add note, flag for review)
-  ↓
-
-[Confirm relist]
-Shows preview of relisted item card
-Circulation count increments: "This will be circulated 5×"
-Meetup availability: "When can you hand it off?" — today / tomorrow / pick date
-CTA: "Put it back in the exchange"
-  ↓
-
-[Success — Keep It Moving]
-"✓ Tent is back in the exchange"
-Badge awarded: 🏅 "Keep It Moving" — first-time badge for closing the loop
-"This tent has now passed through 5 travelers. You made that happen."
-CTA: "Done" → Home
+— Path B: Not passing on —
+[Not-passing sheet]
+Reason checklist (keeping it / consumed / no longer usable / passed off app / other)
+  ↓ Submit
+[Thank-you sheet]
+"Thanks for letting us know"
+  ↓ Done restarts the prototype
 ```
 
 ---

@@ -36,11 +36,11 @@ Vercel builds and publishes within a minute or so. The `prep/` folder is kept in
 repo but excluded from the live site by `.vercelignore`.
 
 ## The flows
-- **Borrow (hero flow):** search a need → matched items nearby (distance + re-circulation count) → item detail with trust signals and a "not for sale" stance → safe-exchange ground rules → confirmation that rewards returning the item.
-- **List:** leave gear behind via "List gear you can't take home" → auto-detected category, condition, photo, pickup windows → preview → live.
-- **Pass it on:** the borrowed item prompts a return → a prefilled relist reuses the listing flow → completing it unlocks the Trail Keeper achievement, the behavior that closes the loop.
+- **Borrow (hero flow):** search a need → matched items nearby (distance + re-circulation count) → item detail with trust signals and a "not for sale" stance → safe-exchange ground rules → request sent → a "did you get it?" sheet with a quick star review. Confirming puts the item in a "Borrowed Here" section you can pass on, so the whole borrow → review → circulate loop is playable.
+- **List:** leave gear behind via "List gear you can't take home" → auto-detected category, condition, photo, pickup windows (with tap-to-fill time and location suggestions) → preview → live.
+- **Pass it on:** the borrowed item prompts a return → a prefilled relist reuses the listing flow → completing it unlocks the Trail Keeper achievement, the behavior that closes the loop. Either passing it on or opting out restarts the prototype so it can be played again.
 
-Listings are data-driven (every seeded item opens its own detail), with supporting messages and profile screens. Open `index.html` in a browser to click through it.
+Listings are data-driven (every seeded item opens its own detail), with supporting messages and profile screens. A welcome sheet greets you on launch, and a "Reset prototype" control restarts the demo. Open `index.html` in a browser to click through it.
 
 ## What's intentionally *not* built
 Item world-journey map, real supply matching, and any backend. Named aloud as the vision, cut so the built flows ship honest and complete. Inventory is seeded to sidestep the cold-start problem for the demo.

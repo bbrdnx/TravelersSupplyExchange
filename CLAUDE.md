@@ -30,31 +30,49 @@ TSE is a concept app: a trusted way for travelers to borrow the gear a trip need
 
 ## Current prototype state
 
-### Screens in index.html (11 total)
+### Screens in index.html (16 `<section class="screen">` elements)
 
-**Borrow flow (fully built):**
+**Borrow flow:**
 | ID | Screen |
 |----|--------|
-| `s-home` | Home / search |
+| `s-splash` | Splash. Auto-advances to home after ~2.5s, then opens the welcome sheet |
+| `s-home` | Home feed / search. Shows the dynamic "Borrowed Here" section after a borrow |
 | `s-results` | Results list |
-| `s-detail` | Item detail |
+| `s-detail` | Item detail (data-driven via `openDetail(id, from)`) |
 | `s-exchange` | Safe exchange ground rules |
-| `s-done` | Request sent confirmation |
+| `s-done` | Request sent confirmation. CTA ("Continue") opens the receive/review sheet |
 
-**List/offload flow (fully built):**
+**List / pass-on flow:**
 | ID | Screen |
 |----|--------|
 | `s-list-category` | Category selection |
-| `s-list-details` | Item name, condition, description |
+| `s-list-details` | Item name, condition, description (+ relist banner when passing on) |
 | `s-list-photo` | Add a photo |
-| `s-list-logistics` | Departure date + meetup area |
+| `s-list-logistics` | Availability windows + meetup area, each with tap-to-fill quick-add suggestion chips |
 | `s-list-preview` | Preview listing card |
 | `s-list-done` | Listing live confirmation |
 
+**Supporting:**
+| ID | Screen |
+|----|--------|
+| `s-messages` | Messages list (most recent active, the rest locked for the demo) |
+| `s-dm` | DM conversation |
+| `s-profile-own` | Own profile. "Currently Borrowing" reflects the borrowed item, with an empty state otherwise |
+| `s-profile-other` | Another traveler's profile |
+
+### Overlays (bottom sheets / modal, not screens)
+- `#welcome-sheet` — demo intro, opens after the splash
+- `#receive-sheet` — "Did you get the item?" + tappable star review; Confirm is gated on a rating
+- `#pass-sheet` — pass-it-on confirm, leads to the prefilled relist
+- `#keep-sheet` — not-passing reason checklist
+- `#thanks-sheet` — thank-you after a not-passing reason
+- `#ach-modal` — Trail Keeper achievement modal (animates in, then restarts the prototype)
+
+### The playable borrow loop
+Borrow any item → request sent (`s-done`) → receive/review sheet → confirm makes the item appear in a dynamic "Borrowed Here" section on home and in the profile "Currently Borrowing" (teaser copy generated from the item's real `circ`, and the item is removed from the home feed) → Pass it on (prefilled relist → Trail Keeper achievement) or Not passing on (reason → thank-you) → `location.reload()` restarts the prototype so it can be played again. A "↻ Reset prototype" button in the side caption also restarts on demand. Key state vars: `currentDetailId`, `borrowedItem`, `passItemId`, `reviewStars`.
+
 ### Not built (intentionally cut from MVP)
-- Relist / return flow ("Keep It Moving" — the loop-closing behavior, teased on `s-done`)
 - Item world-journey map
-- Achievements / gamification beyond the badge mention
 - Real supply matching
 - Any backend
 
